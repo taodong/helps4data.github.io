@@ -1,3 +1,10 @@
+# Description: This is the schema to generate Salesforce Order records
+# When uploading the data to Salesforce, use AccountNumber as the external ID for the account object
+# Objects involved:
+#  - account
+#  - contact: Need a custom field "ExtId__c" for reference, field type text, minimum length 13
+#  - contract: Need a custom field "ExtId__c" for reference, field type text, minimum length 13
+#  - order
 name: "sf_order"
 entities:
   - name: "account"
@@ -112,10 +119,12 @@ entities:
             locale: "en-US"
   - name: "contact"
     properties:
-      - name: "extId"
-        type: "Sequence"
-        index:
-          id: 0
+      - name: "ExtId__c"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "id"
+            qualifier: "BC-##########"
       - name: "accountRefId"
         type: "sequence"
         reference:
@@ -165,6 +174,32 @@ entities:
             locale: "en-US"
       - name: "Title"
         type: "text"
+  - name: "contract"
+    properties:
+      - name: "ExtId__c"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "id"
+            qualifier: "CO-##########"
+      - name: "AccountId"
+        type: "text"
+        reference:
+          entity: "contact"
+          property: "AccountId"
+          linked: "ExtId__c"
+      - name: "BillToContactId"
+        type: "text"
+        reference:
+          entity: "contact"
+          property: "ExtId__c"
+          linked: "ExtId__c"
+      - name: "Status"
+        type: "text"
+      - name: "StartDate"
+        type: "date"
+      - name: "ContractTerm"
+        type: "number"
   - name: "order"
     properties:
       - name: "extId"
@@ -182,24 +217,38 @@ entities:
       - name: "AccountId"
         type: "text"
         reference:
-          entity: "account"
-          property: "AccountNumber"
-          linked: "extId"
-      - name: "AccountNumber"
+          entity: "contract"
+          property: "AccountId"
+          linked: "ExtId__c"
+      - name: "ContractDate"
+        type: "date"
+        reference:
+          entity: "contract"
+          property: "StartDate"
+          linked: "ExtId__c"
+      - name: "EffectiveDate"
+        type: "date"
+        constraints:
+          - type: "correlation"
+            properties:
+              - "ContractDate"
+            formula: "PAST_TIME_AFTER(ContractDate)"
+      - name: "BillToContactId"
         type: "text"
         reference:
-          entity: "account"
-          property: "AccountNumber"
-          linked: "extId"
-      - name: "ActivatedDate"
-        type: "datetime"
+          entity: "contract"
+          property: "BillToContactId"
+          linked: "ExtId__c"
+      - name: "Status"
+        type: "text"
+      - name: "ContractId"
+        type: "text"
+        reference:
+          entity: "contract"
+          property: "ExtId__c"
+          linked: "ExtId__c"
+      - name: "TotalAmount"
+        type: "number"
         constraints:
-          - type: "duration"
-            start:
-              year: 2023
-              month: 10
-              day: 1
-            end:
-              year: 2023
-              month: 12
-              day: 31
+          - type: "precision"
+            max: 2

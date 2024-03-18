@@ -1,6 +1,6 @@
 name: "sf_hw_output"
 entities:
-  - name: "business_account"
+  - name: "account"
     properties:
       - name: "extId"
         hide: true
@@ -8,9 +8,13 @@ entities:
     properties:
       - name: "accountRefId"
         hide: true
-      - name: "extId"
+  - name: "contract"
+    properties:
+      - name: "BillToContactId"
         hide: true
   - name: "order"
     properties:
       - name: "extId"
+        hide: true
+      - name: "ContractDate"
         hide: true
