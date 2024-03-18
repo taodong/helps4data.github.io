@@ -1,0 +1,205 @@
+name: "sf_order"
+entities:
+  - name: "account"
+    properties:
+      - name: "extId"
+        type: "Sequence"
+        index:
+          id: 0
+      - name: "Name"
+        type: "text"
+        index:
+          id: 1
+        constraints:
+          - type: "size"
+            min: 0
+            max: 64
+      - name: "AccountNumber"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "id"
+            qualifier: "BA-##########"
+      - name: "Active__c"
+        type: "text"
+      - name: "Fax"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "id"
+            qualifier: "(###) ###-####"
+            compoundId: 1
+      - name: "Phone"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "id"
+            qualifier: "(###) ###-####"
+            compoundId: 2
+      - name: "Rating"
+        type: "text"
+      - name: "Type"
+        type: "text"
+      - name: "BillingStreet"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "street"
+            locale: "en-US"
+      - name: "BillingCity"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "city"
+            locale: "en-US"
+      - name: "BillingState"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "state"
+            locale: "en-US"
+      - name: "BillingCountry"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "country"
+            locale: "en-US"
+      - name: "BillingPostalCode"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "zip"
+            locale: "en-US"
+      - name: "ShippingStreet"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "street"
+            locale: "en-US"
+      - name: "ShippingCity"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "city"
+            locale: "en-US"
+      - name: "ShippingState"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "state"
+            locale: "en-US"
+      - name: "ShippingCountry"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "country"
+            locale: "en-US"
+      - name: "ShippingPostalCode"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "zip"
+            locale: "en-US"
+  - name: "contact"
+    properties:
+      - name: "extId"
+        type: "Sequence"
+        index:
+          id: 0
+      - name: "accountRefId"
+        type: "sequence"
+        reference:
+          entity: "account"
+          property: "extId"
+          linked: "extId"
+      - name: "AccountId"
+        type: "text"
+        reference:
+          entity: "account"
+          property: "AccountNumber"
+          linked: "extId"
+      - name: "Birthdate"
+        type: "date"
+        constraints:
+          - type: "duration"
+            start:
+              year: 1963
+            end:
+              year: 2000
+      - name: "Department"
+        type: "text"
+      - name: "Description"
+        type: "text"
+        constraints:
+          - type: "size"
+            min: 0
+            max: 500
+      - name: "Email"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "email"
+      - name: "LastName"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "name"
+            qualifier: "lastname"
+            locale: "en-US"
+      - name: "FirstName"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "name"
+            qualifier: "firstname"
+            locale: "en-US"
+      - name: "Title"
+        type: "text"
+  - name: "order"
+    properties:
+      - name: "extId"
+        type: "Sequence"
+        index:
+          id: 0
+      - name: "Name"
+        type: "text"
+        index:
+          id: 1
+        constraints:
+          - type: "size"
+            min: 1
+            max: 80
+      - name: "AccountId"
+        type: "text"
+        reference:
+          entity: "account"
+          property: "AccountNumber"
+          linked: "extId"
+      - name: "AccountNumber"
+        type: "text"
+        reference:
+          entity: "account"
+          property: "AccountNumber"
+          linked: "extId"
+      - name: "ActivatedDate"
+        type: "datetime"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2023
+              month: 10
+              day: 1
+            end:
+              year: 2023
+              month: 12
+              day: 31

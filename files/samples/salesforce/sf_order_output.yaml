@@ -8,3 +8,9 @@ entities:
     properties:
       - name: "accountRefId"
         hide: true
+      - name: "extId"
+        hide: true
+  - name: "order"
+    properties:
+      - name: "extId"
+        hide: true

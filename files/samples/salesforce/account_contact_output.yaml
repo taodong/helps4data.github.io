@@ -1,0 +1,12 @@
+name: "sf_hw_output"
+entities:
+  - name: "business_account"
+    properties:
+      - name: "extId"
+        hide: true
+  - name: "contact"
+    properties:
+      - name: "accountRefId"
+        hide: true
+      - name: "extId"
+        hide: true

@@ -31,7 +31,7 @@ data:
               - "Other"
             weight: 0.3
   - entity: "contact"
-    count: 1000
+    count: 500
     properties:
       - name: "Department"
         values:
