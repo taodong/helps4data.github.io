@@ -1,0 +1,14 @@
+name: "sf_type_map_plan"
+dialect: "salesforce"
+schema: "sf_type_map"
+data:
+  - entity: "TypeSample__c"
+    count: 2
+    properties:
+      - name: "My_Pick__c"
+        values:
+          - values:
+              - "val1"
+              - "val2"
+              - "val3"
+            weight: 1.0

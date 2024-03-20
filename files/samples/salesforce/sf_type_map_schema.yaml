@@ -1,0 +1,74 @@
+# Salesforce Data Type Mapping Sample
+# Unsupported types:
+# - "Geolocation"
+# - "Picklist (Multi-Select)"
+# - "Time"
+name: "sf_type_map"
+entities:
+  - name: "TypeSample__c"
+    properties:
+      - name: "My_CheckBox__c"
+        type: "boolean"
+      - name: "My_Currency__c"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: 0
+            max: 99999
+          - type: "precision"
+            max: 2
+      - name: "My_Date__c"
+        type: "date"
+        constraints:
+          - type: "duration"
+            start:
+              year: 1700
+              month: 1
+              day: 2
+      - name: "My_DateTime__c"
+        type: "datetime"
+        constraints:
+          - type: "duration"
+            start:
+              year: 1700
+              month: 1
+              day: 2
+      - name: "My_Email__c"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "email"
+      - name: "My_Number__c"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: 0
+            max: 99999
+      - name: "My_Perc__c"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: 0
+            max: 100
+          - type: "precision"
+            max: 2
+      - name: "My_Phone__c"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "id"
+            qualifier: "(###) ###-####"
+      - name: "My_Pick__c"
+        type: "text"
+      - name: "My_URL__c"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "id"
+            qualifier: "https://www.?????????.com"
+      - name: "My_Text__c"
+        type: "text"
+        constraints:
+          - type: "size"
+            min: 0
+            max: 255
