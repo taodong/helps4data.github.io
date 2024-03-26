@@ -72,3 +72,5 @@ entities:
           - type: "size"
             min: 0
             max: 255
+      - name: "My_Time__c"
+        type: "time"
