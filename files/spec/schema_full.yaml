@@ -1,0 +1,16 @@
+name: "schemaFullExample"
+entities:
+  - name: "user"
+    properties:
+      - name: "id"
+        type: "sequence"
+        index:
+          id: 0
+      - name: "email"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "email"
+          - type: "size"
+            min: 1
+            max: 128
