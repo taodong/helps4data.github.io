@@ -26,7 +26,8 @@ entities:
         constraints:
           - type: "category"
             name: "id"
-            qualifier: "BA-##########"
+          - type: "format"
+            format: "BA-##########"
       - name: "Active__c"
         type: "text"
       - name: "Fax"
@@ -34,15 +35,17 @@ entities:
         constraints:
           - type: "category"
             name: "id"
-            qualifier: "(###) ###-####"
             compoundId: 1
+          - type: "format"
+            format: "(###) ###-####"
       - name: "Phone"
         type: "text"
         constraints:
           - type: "category"
             name: "id"
-            qualifier: "(###) ###-####"
             compoundId: 2
+          - type: "format"
+            format: "(###) ###-####"
       - name: "Rating"
         type: "text"
       - name: "Type"
@@ -124,7 +127,8 @@ entities:
         constraints:
           - type: "category"
             name: "id"
-            qualifier: "BC-##########"
+          - type: "format"
+            format: "BC-##########"
       - name: "accountRefId"
         type: "sequence"
         reference:
@@ -181,7 +185,8 @@ entities:
         constraints:
           - type: "category"
             name: "id"
-            qualifier: "CO-##########"
+          - type: "format"
+            format: "CO-##########"
       - name: "AccountId"
         type: "text"
         reference:

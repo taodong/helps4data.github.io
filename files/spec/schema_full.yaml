@@ -14,3 +14,9 @@ entities:
           - type: "size"
             min: 1
             max: 128
+      - name: "firstName"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "name"
+            qualifier: "firstName"

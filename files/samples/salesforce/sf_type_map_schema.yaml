@@ -57,7 +57,8 @@ entities:
         constraints:
           - type: "category"
             name: "id"
-            qualifier: "(###) ###-####"
+          - type: "format"
+            format: "(###) ###-####"
       - name: "My_Pick__c"
         type: "text"
       - name: "My_URL__c"
@@ -65,7 +66,8 @@ entities:
         constraints:
           - type: "category"
             name: "id"
-            qualifier: "https://www.?????????.com"
+          - type: "format"
+            format: "https://www.?????????.com"
       - name: "My_Text__c"
         type: "text"
         constraints:
