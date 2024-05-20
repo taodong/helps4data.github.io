@@ -142,7 +142,11 @@ entities:
         constraints:
           - type: "size"
             min: 0
-            max: 500
+            max: 200
+          - type: "format"
+            format: |
+              style: 3
+
       - name: "Email"
         type: "text"
         constraints:

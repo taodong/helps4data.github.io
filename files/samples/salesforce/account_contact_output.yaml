@@ -8,5 +8,3 @@ entities:
     properties:
       - name: "accountRefId"
         hide: true
-      - name: "extId"
-        hide: true
