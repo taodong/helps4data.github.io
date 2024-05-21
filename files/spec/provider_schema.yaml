@@ -1,0 +1,51 @@
+# Description: This schema lists all the supported data providers and their sample usage
+# All data providers are enabled through "category" type constraint
+# Any property applying a data provider must be a "text" type
+
+name: "data_providers"
+entities:
+  - name: "data_providers"
+    properties:
+      ## Random Text String Provider
+      ## category name: text
+      ## locale supported: en-US
+      ## Usage:
+      ## 1. Word Count:
+      ## The word count of generated text is defined through "size" constraint or "length" constraint
+      ## The word count does not include any prefixes and suffixes provided
+      ## If no count is provided, the provider generates a random word count between 5 and 20
+      ## 1.1 Word Count
+      ## Fixed word count is defined through "length" constraint
+      ## Example of generate 5 words:
+      ## constraints:
+      ##   - type: "length"
+      ##     max: 5
+      ## 1.2 Format
+      ## Extra format can be defined through "format" constraint
+      ## It's important to have pipe (|) character at the beginning of the format string because format spec is passed as YAML string in a separate process
+      ## In a format spec, you can define three extra properties:
+      ##  - prefixes: list of prefixes to be added to the generated text
+      ##  - suffixes: list of suffixes to be added to the generated text
+      ##  - style: style of the generated text
+      ##    - 1: all lower case, e.g. "hello world"
+      ##    - 2: all upper case, e.g. "HELLO WORLD"
+      ##    - 3: upper case for first character, lower case for others, e.g. "Hello world"
+      ##    - 4: camel case for each word, e.g. "Hello World"
+      - name: "random_text_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "text"
+          - type: "size"
+            min: 5
+            max: 10
+          - type: "format"
+            format: |
+              prefixes:
+                - "California"
+                - "New York"
+              suffixes:
+                - "Hospital"
+                - "Medical Center"
+                - "Clinic"
+              style: 4

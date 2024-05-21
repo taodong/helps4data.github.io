@@ -1,0 +1,5 @@
+name: "data_providers"
+schema: "data_providers"
+data:
+  - entity: "data_providers"
+    count: 5
