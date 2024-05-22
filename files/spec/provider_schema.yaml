@@ -6,9 +6,29 @@ name: "data_providers"
 entities:
   - name: "data_providers"
     properties:
+      ## Id Provider
+      ## This provider generates random ID string with given format, if no format is provided, it generates UUID
+      ##  - category name: id
+      ##  - auxiliary constraints: format
+      ## Usage:
+      ## 1. Define ID Format
+      ## Id format can be defined through "format" constraint as a string value.
+      ## Two wildcards are supported: "?" and "#" where "?" represents a random letter and "#" represents a random digit
+      ## Examples:
+      ## - "ID-##########" - it generates ID starting with "ID-" and ending with 10 random digits
+      ## - "2024.2.???" - it generates ID starting with "2024.2." and ending with 3 random letters
+      - name: "id_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "id"
+          - type: "format"
+            format: "ID-??########"
       ## Random Text String Provider
-      ## category name: text
-      ## locale supported: en-US
+      ## This provider generates random text string
+      ##  - category name: text
+      ##  - locale supported: en-US
+      ##  - auxiliary constraints: format, length, size
       ## Usage:
       ## 1. Word Count:
       ## The word count of generated text is defined through "size" constraint or "length" constraint
@@ -49,3 +69,26 @@ entities:
                 - "Medical Center"
                 - "Clinic"
               style: 4
+      ## IP Address Provider
+      ## This provider generates random IP4 address
+      ##  - category name: ip
+      ##  - auxiliary constraints: format
+      ## Usage:
+      ## 1. Define IP Address Masks
+      ## Ip address masks can be defined through "format" constraint
+      ## The format spec is passed as YAML string in a separate process, please make sure pipe (|) character is at the beginning of the format string
+      ## The mask is defined as a list of strings, each string represents a mask. If more than 1 mask is defined, each mask is applied randomly
+      ## A mask consists with number parts and the wildcard character (#) parts
+      ## Examples:
+      ##  - "172.0.###.###" - it generates IP addresses starting with 172.0
+      ##  - "###.23.5.###" - it generates IP addresses with 23.5 in the middle
+      ##  - "172.###.###.5" - it generates IP addresses starting with 172 and ending with 5
+      - name: "ip_address_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "ip"
+          - type: "format"
+            format: |
+              - "172.0.###.###"
+              - "172.1.###.###"
