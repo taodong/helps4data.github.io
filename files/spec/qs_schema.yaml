@@ -71,6 +71,8 @@ entities:
         constraints:
           - type: "category"
             name: "text"
+            compoundId: 1
+          - type: "format"
             format: |
               style: 4
           - type: "size"
@@ -81,6 +83,8 @@ entities:
         constraints:
           - type: "category"
             name: "text"
+            compoundId: 2
+          - type: "format"
             format: |
               style: 3
           - type: "size"
