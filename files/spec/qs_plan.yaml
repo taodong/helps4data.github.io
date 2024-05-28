@@ -1,0 +1,17 @@
+name: "quickstart"
+dialect: "general"
+schema: "quickstart"
+data:
+  - entity: "users"
+    count: 10
+  - entity: "follows"
+    count: 20
+  - entity: "posts"
+    count: 50
+    properties:
+      - name: "status"
+        values:
+          - values:
+              - "DELETED"
+            weight: 0.1
+        defaultValue: "ACTIVE"
