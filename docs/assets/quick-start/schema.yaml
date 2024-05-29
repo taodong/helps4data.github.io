@@ -1,0 +1,109 @@
+name: "quickstart"
+entities:
+  - name: "users"
+    properties:
+      - name: "id"
+        type: "sequence"
+        index:
+          id: 0
+      - name: "email"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "email"
+      - name: "username"
+        type: "text"
+        constraints:
+          - type: "char_group"
+            groups:
+              - "ascii_alpha_numerals"
+          - type: "size"
+            min: 8
+            max: 32
+        index:
+          id: 1
+      - name: "created_at"
+        type: "datetime"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2023
+              month: 10
+            end:
+              year: 2023
+              month: 11
+  - name: "follows"
+    properties:
+      - name: "following_user_id"
+        type: "sequence"
+        reference:
+          entity: "users"
+          property: "id"
+        index:
+          id: 1
+          type: 4
+      - name: "followed_user_id"
+        type: "sequence"
+        reference:
+          entity: "users"
+          property: "id"
+        index:
+          id: 1
+          type: 4
+      - name: "created_at"
+        type: "datetime"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2023
+              month: 11
+            end:
+              year: 2023
+              month: 12
+  - name: "posts"
+    properties:
+      - name: "id"
+        type: "sequence"
+        index:
+          id: 0
+      - name: "title"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "text"
+            compoundId: 1
+          - type: "format"
+            format: |
+              style: 4
+          - type: "size"
+            min: 5
+            max: 20
+      - name: "body"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "text"
+            compoundId: 2
+          - type: "format"
+            format: |
+              style: 3
+          - type: "size"
+            min: 25
+            max: 100
+      - name: "user_id"
+        type: "sequence"
+        reference:
+          entity: "users"
+          property: "id"
+      - name: "status"
+        type: "text"
+      - name: "created_at"
+        type: "datetime"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2023
+              month: 11
+            end:
+              year: 2023
+              month: 12
