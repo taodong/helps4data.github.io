@@ -21,6 +21,7 @@ module.exports = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'taodong', // Usually your GitHub org/user name.
   projectName: 'helps4data', // Usually your repo name.
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
