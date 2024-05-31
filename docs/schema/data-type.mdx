@@ -1,0 +1,30 @@
+---
+sidebar_position: 1
+sidebar_label: Property Data Type
+sidebar_clas_name: green
+---
+
+# Property Data Type
+
+The property data type determines the types of data generated for a specific property. When integrating your data into the generation process, it’s crucial to ensure that the provided values align with the defined type.
+
+| Type     | Description                                                   |
+|----------|---------------------------------------------------------------|
+| sequence | An auto incremental integer number                            |
+| text     | A text value                                                  |
+| number   | A decimal number value, such as 100, -54 or 99.99             |
+| date     | A date value with day-level accuracy                          |
+| datetime | A date time value with second level accuracy                  |
+| time     | A time value without date with second level accuracy          |
+
+## Data Format
+The output format of each data type is determined by its dialect, constraints, or both. When no constraints are present, the default output formats are listed as follows.
+
+|          | General                                                              | SQL                                                                 | Salesforce                                                                        |
+|----------|----------------------------------------------------------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| sequence | Integer starting from 1, e.g. 1, 2, 3                                | Integer starting from 1, e.g. 1, 2, 3                               | Integer starting from 1, e.g. 1, 2, 3                                             |
+| text     | Text, e.g. "abc"                                                     | Text, e.g. "abc"                                                    | Text, e.g. "abc"                                                                  |
+| number   | Number, e.g. 5, -3.2, 100.99                                         | Number, e.g. 5, -3.2, 100.99                                        | Number, e.g. 5, -3.2, 100.99                                                      |
+| date     | Text formatted as "yyyy-MM-dd", e.g. "2024-05-31"                    | Text formatted as "yyyy-MM-dd", e.g. "2024-05-31"                   | Text formatted as "yyyy-MM-dd", e.g. "2024-05-31"                                 |
+| datetime | Text formatted as "yyyy-MM-dd HH:mm:ss", e.g. "2024-05-31 15:23:17"  | Text formatted as "yyyy-MM-dd HH:mm:ss", e.g. "2024-05-31 15:23:17" | Text formatted as "yyyy-MM-dd'T'HH:mm:ss.'000Z'", e.g. "2024-05-31T15:23:17.000Z" |
+| time     | Text formatted as "HH:mm:ss", e.g. "08:05:09", "00:00:00"            | Text formatted as "HH:mm:ss", e.g. "08:05:09", "00:00:00"           | Text formatted as "HH:mm:ss.'000Z'", e.g. "08:05:09.000Z", "00:00:00.000Z"        |

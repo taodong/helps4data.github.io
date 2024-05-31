@@ -25,3 +25,31 @@ The number trailing the entity name identifies the order in which the data shoul
 The schema file is a YAML file that defines the structure of the data to be generated. It contains the following fields, both of which are required:
 1. **name** - The name of the schema, which serves as an ID to pair with the plan file.
 2. **entities** - A set of entity definitions. At least one entity is required. Entities with the same name are considered duplicates, and this will cause the data generation to fail.
+
+An **entity** is the fundamental unit of data generation. The data for each entity will be stored in a distinct output file. An entity consists of a list of properties, each of which includes the following mandatory fields:
+1. **name** - This represents the name of the property.
+2. **type** - This denotes the data type of the property.
+
+```yaml title="Sample schema comprise 'users' entity with single 'id' property"
+name: "quickstart"
+entities:
+  - name: "users"
+    properties:
+      - name: "id"
+        type: "sequence"
+```
+### Property Data Type
+When defining a property under entity, the following data types are supported.
+
+| Type     | Description                                                   |
+|----------|---------------------------------------------------------------|
+| sequence | An auto incremental integer number                            |
+| text     | A text value                                                  |
+| number   | A decimal number value, such as 100, -54 or 99.99             |
+| date     | A date value with day-level accuracy                          |
+| datetime | A date time value with second level accuracy                  |
+| time     | A time value without date with second level accuracy          |
+
+:::info
+Please refer to [Property Data Type](/schema/data-type) page for detailed usage.
+:::
