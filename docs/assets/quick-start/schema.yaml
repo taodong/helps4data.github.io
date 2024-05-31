@@ -42,6 +42,7 @@ entities:
         index:
           id: 1
           type: 4
+          qualifier: 1
       - name: "followed_user_id"
         type: "sequence"
         reference:
@@ -50,6 +51,7 @@ entities:
         index:
           id: 1
           type: 4
+          qualifier: 1
       - name: "created_at"
         type: "datetime"
         constraints:

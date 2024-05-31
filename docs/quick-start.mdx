@@ -6,13 +6,22 @@ sidebar_clas_name: green
 ---
 
 # Quick Start
-Each data generation job takes up to three input files in YAML format:  
+Each data generation order takes up to three input files in YAML format:
 1. **Schema File**: [required] It defines the structure of the data to be generated.
 2. **Plan File**: [required] It defines target data details, such as record number.
 3. **Output Control File**: [optional] It defines any modifications for data presentation.
 
-For example, this **[schema file](./assets/quick-start/schema.yaml)** and **[plan file](./assets/quick-start/plan.yaml)** can be used to generate data for the three tables illustrated below
-
+For example, we can use this **[schema file](./assets/quick-start/schema.yaml)** and **[plan file](./assets/quick-start/plan.yaml)** to generate data, structured as illustrated below
 ![post sample](/img/samples/quick_start.png)
+Based on the chosen output format type, each entity defined in the schema file will be generated as a separate file.
+For example, if the output format is set to JSON, as illustrated, three files will be generated:
+![json output file](/img/samples/output_file_type.png)
+- users_0.json
+- follows_1.json
+- posts_2.json
 
-
+The number trailing the entity name identifies the order in which the data should be applied to the target system, such as MySQL.
+## Schema File
+The schema file is a YAML file that defines the structure of the data to be generated. It contains the following fields, both of which are required:
+1. **name** - The name of the schema, which serves as an ID to pair with the plan file.
+2. **entities** - A set of entity definitions. At least one entity is required. Entities with the same name are considered duplicates, and this will cause the data generation to fail.
