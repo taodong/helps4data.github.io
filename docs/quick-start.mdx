@@ -4,6 +4,8 @@ sidebar_position: 1
 sidebar_label: Quick Start
 sidebar_clas_name: green
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Quick Start
 Each data generation order takes up to three input files in YAML format:
@@ -23,12 +25,12 @@ For example, if the output format is set to JSON, as illustrated, three files wi
 The number trailing the entity name identifies the order in which the data should be applied to the target system, such as MySQL.
 ## Schema File
 The schema file is a YAML file that defines the structure of the data to be generated. It contains the following fields, both of which are required:
-1. **name** - The name of the schema, which serves as an ID to pair with the plan file.
-2. **entities** - A set of entity definitions. At least one entity is required. Entities with the same name are considered duplicates, and this will cause the data generation to fail.
+1. **name**: The name of the schema, which serves as an ID to pair with the plan file.
+2. **entities**: A set of entity definitions. At least one entity is required. Entities with the same name are considered duplicates, and this will cause the data generation to fail.
 
 An **entity** is the fundamental unit of data generation. The data for each entity will be stored in a distinct output file. An entity consists of a list of properties, each of which includes the following mandatory fields:
-1. **name** - This represents the name of the property.
-2. **type** - This denotes the data type of the property.
+1. **name**: This represents the name of the property.
+2. **type**: This denotes the data type of the property.
 
 ```yaml title="Sample schema comprise 'users' entity with single 'id' property"
 name: "quickstart"
@@ -53,3 +55,68 @@ When defining a property under entity, the following data types are supported.
 :::info
 Please refer to [Property Data Type](/schema/data-type) page for detailed usage.
 :::
+
+### Index, Constraints and Reference
+To support complex data structures, users can define indices, constraints, and references in the schema file. This provides the capability to generate data with more intricate relationships.
+- **Index**: This is used to establish the uniqueness of a property or a combination of properties.
+- **Constraints**: This is used to set the constraints for a property, such as the minimum and maximum values.
+- **Reference**: This is used to delineate the relationship between entities.
+
+<Tabs defaultValue="index"
+    values={[
+        { label: 'Index Example', value: 'index' },
+        { label: 'Constraint Example', value: 'constraints' },
+        { label: 'Reference Example', value: 'reference' },
+    ]}>
+    <TabItem value="index">
+        ```yaml title="Property 'id' as unique index"
+            properties:
+              - name: "id"
+                type: "sequence"
+                index:
+                  id: 0
+        ```
+    </TabItem>
+    <TabItem value="constraints">
+        ```yaml title="Property 'created_at' between November and December 2023"
+            properties:
+              - name: "created_at"
+                type: "datetime"
+                constraints:
+                  - type: "duration"
+                    start:
+                      year: 2023
+                      month: 11
+                    end:
+                      year: 2023
+                      month: 12
+        ```
+    </TabItem>
+    <TabItem value="reference">
+        ```yaml title="Property 'user_id' references property 'id' of entity 'users'"
+            properties:
+              - name: "user_id"
+                type: "sequence"
+                reference:
+                  entity: "users"
+                  property: "id"
+        ```
+    </TabItem>
+</Tabs>
+
+## Plan File
+The plan file, defining the data generation strategy, instructs the generator on using the targeted schema, including record count, additional constraints, and potential value distributions. It contains four primary elements:
+1. **Name**: [required] This is the name of the data plan and can be any text.
+2. **Dialect**: [optional] This refers to the targeted dialect. Supported values are "general", "mysql" and "salesforce". If not specified, the default value is "general".
+3. **Schema**: [required] This refers to the targeted schema. Its value must match the name defined in the schema file.
+4. **Data**: [optional] This element is a list of entity data definitions, detailing the instructions for generating the data of each entity.
+
+```yaml title="Sample plan file with 'quickstart' schema and 10 records for 'users' entity"
+name: "quickstart"
+dialect: "general"
+schema: "quickstart"
+data:
+  - entity: "users"
+    count: 10
+```
+
