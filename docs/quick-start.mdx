@@ -109,7 +109,7 @@ The plan file, defining the data generation strategy, instructs the generator on
 1. **Name**: [required] This is the name of the data plan and can be any text.
 2. **Dialect**: [optional] This refers to the targeted dialect. Supported values are "general", "mysql" and "salesforce". If not specified, the default value is "general".
 3. **Schema**: [required] This refers to the targeted schema. Its value must match the name defined in the schema file.
-4. **Data**: [optional] This element is a list of entity data definitions, detailing the instructions for generating the data of each entity.
+4. **Data**: [required] This element comprises a list of entity data definitions, each detailing the instructions for generating the data for that particular entity. For each entry, a ‘count’ is required, which specifies the number of records to generate.
 
 ```yaml title="Sample plan file with 'quickstart' schema and 10 records for 'users' entity"
 name: "quickstart"
@@ -119,4 +119,17 @@ data:
   - entity: "users"
     count: 10
 ```
+### Property Specification
+For individual properties in entity data, users can optionally define extra specifications, such as constraints, distributions, and default values.
 
+```yaml title="Sample property specification"
+    # For the ‘status’ property, assign the value ‘DELETED’ with a 10% probability,
+    # and use ‘ACTIVE’ as the default value.
+    properties:
+      - name: "status"
+        values:
+          - values:
+              - "DELETED"
+            weight: 0.1
+        defaultValue: "ACTIVE"
+```
