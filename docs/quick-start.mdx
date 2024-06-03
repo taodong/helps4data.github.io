@@ -133,3 +133,42 @@ For individual properties in entity data, users can optionally define extra spec
             weight: 0.1
         defaultValue: "ACTIVE"
 ```
+## Output Control File
+Though optional, the output control file enables auxiliary features to be applied to the generated data, particularly when Unicode or special characters are used in the user’s data model. The output control file provides the user with two capabilities:
+1. **Name Replacement**: This allows the user to modify the names of entities or properties in the output file.
+2. **Property Hiding**: This provides the user with the flexibility to hide certain properties in the output file.
+
+<Tabs defaultValue="replacement"
+    values={[
+        { label: 'Name Replacement', value: 'replacement' },
+        { label: 'Property Hiding', value: 'hidden' }
+    ]}>
+    <TabItem value="replacement">
+        ```yaml title="Sample Name Replacement"
+            # Replace the entity name ‘businessAccount’ with ‘account’
+            # Replace the property name ‘extId’ with ‘external_id’
+            name: "name_replacement"
+            entities:
+              - name: "businessAccount"
+                alias: "business_account"
+                properties:
+                  - name: "extId"
+                    alias: "external_id"
+        ```
+    </TabItem>
+    <TabItem value="hidden">
+        ```yaml title="Sample Property Hiding"
+            # Hide the property ‘password’ in the entity ‘contact’
+            name: "name_replacement"
+            entities:
+              - name: "contact"
+                properties:
+                  - name: "accountRefId"
+                    hide: true
+        ```
+    </TabItem>
+</Tabs>
+
+:::tip
+Entity and property names in the schema and plan files should contain only alphanumeric characters, if possible. This can help avoid potential issues when generating data. Utilize the output control file to modify the names as needed.
+:::
