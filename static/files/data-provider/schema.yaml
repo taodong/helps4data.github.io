@@ -6,6 +6,57 @@ name: "data_providers"
 entities:
   - name: "data_providers"
     properties:
+      ## Name Provider
+      ## This provider generates random person names
+      ## - category name: name
+      ## - locale:  IETF BCP 47 language tag string such as en-US, ja-JP, default is en-US
+      ##  qualifier: firstname or lastname, generating full name if not provided
+      - name: "full_name_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "name"
+            locale: "ja-JP"
+      - name: "first_name_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "name"
+            qualifier: "firstname"
+            compoundId: 1
+      - name: "last_name_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "name"
+            qualifier: "lastname"
+            compoundId: 2
+      ## Address Provider
+      ## This provider generates random address
+      ##  - category name: address
+      ##  - locale: IETF BCP 47 language tag string such as en-US, ja-JP, default is en-US
+      ##  - qualifier: street, city, state, country or zip, generating full address if not provided
+      - name: "full_address_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            locale: "zh-TW"
+      - name: "street_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "address"
+            qualifier: "street"
+            compoundId: 1
+      ## Email Provider
+      ## This provider generates random email address
+      ##  - category name: email
+      - name: "email_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "email"
       ## Id Provider
       ## This provider generates random ID string with given format, if no format is provided, it generates UUID
       ##  - category name: id

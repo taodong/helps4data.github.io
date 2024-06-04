@@ -1,0 +1,9 @@
+{
+  "label": "Plan",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "Plan File",
+    "description": "Learn about key ideas related to applying data generation rules in a plan file."
+  }
+}

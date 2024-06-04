@@ -1,0 +1,78 @@
+---
+sidebar_position: 1
+sidebar_label: Data Providers
+sidebar_clas_name: green
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Data Providers
+
+Data providers are a set of constraints that instruct the generator to create meaningful data for a property, such as person names, addresses, emails, etc. The following data providers are available:
+
+| Provider Name | Category Name | Description              |
+|---------------|---------------|--------------------------|
+| Name          | name          | A person name            |
+| Address       | address       | An address               |
+| Email         | email         | An email                 |
+| Id            | id            | Id String                |
+| IP Address    | ip            | IP4 address              |
+| Text String   | text          | A line of formatted text |
+
+The following sample files can be used to generate five records using each provider:
+- <a target="_blank" href="/files/data-provider/schema.yaml" download="schema.yaml">Sample schema file</a>
+- <a target="_blank" href="/files/data-provider/plan.yaml" download="plan.yaml">Sample plan file</a>
+
+All data providers are defined with constraints of a `category` type, which comprise four properties:
+
+- **name**: [required] Data provider name.
+- **qualifier**: [optional, available to some providers] It is used to extract certain parts of the generated data, such as first name, last name, etc.
+- **locale**: [optional, available to some providers] It limits data generation to a specific locale.
+- **compoundId**: [optional] Used to differentiate the same data provider within the same entity. If properties have the same category name and compoundId, the same value will be used, otherwise different values are generated. The default value is 0.
+
+
+:::warning
+Data providers can be only applied to text properties. They will be ignored when applied to other data types.
+:::
+
+## Name Provider
+This provider generates random person names:
+- **name**: name
+- **locale**: An IETF BCP 47 language tag string, such as ‘en-US’ or ‘ja-JP’. The default is ‘en-US’.
+- **qualifier**: If ‘firstname’ or ‘lastname’ is not provided, it generates the full name.
+
+<Tabs defaultValue="name" groupId="name-provider">
+  <TabItem value="name" label="Create Full Name">
+    ```yaml title="Create Japanese full name"
+      properties:
+        - name: "full_name_sample"
+          type: "text"
+          constraints:
+            - type: "category"
+              name: "name"
+              locale: "ja-JP"
+    ```
+  </TabItem>
+  <TabItem value="firstname" label="Create First Name">
+    ```yaml title="Create English first name"
+      properties:
+        - name: "first_name_sample"
+          type: "text"
+          constraints:
+            - type: "category"
+              name: "name"
+              qualifier: "firstname"
+    ```
+  </TabItem>
+  <TabItem value="lastname" label="Create Last Name">
+    ```yaml title="Create English last name"
+      properties:
+        - name: "last_name_sample"
+          type: "text"
+          constraints:
+            - type: "category"
+              name: "name"
+              qualifier: "lastname"
+  ```
+  </TabItem>
+</Tabs>
