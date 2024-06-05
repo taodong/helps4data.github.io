@@ -73,10 +73,6 @@ module.exports = {
             label: 'Wedge Data Generator',
             position: 'right',
             href: 'https://data.wedgeup.com'
-          },
-          {
-            type: 'search',
-            position: 'right'
           }
         ],
       },

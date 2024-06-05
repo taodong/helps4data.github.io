@@ -1,0 +1,267 @@
+---
+sidebar_position: 2
+sidebar_label: Constraints
+sidebar_clas_name: green
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Constraints
+
+Constraints are rules used to ensure that the generated data meet the requirements of the target data model, such as text length or number range. A constraint can be defined in either the schema file or the plan file. A good practice is to define system-level constraints within the schema and all other purpose-specific constraints in the data plan. The following constraints are supported:
+
+| Name        | Compatible Type      | Description                           |
+|-------------|----------------------|---------------------------------------|
+| chain       | number, datetime, date | A Markov chain on records generated in sequence   |
+| category    | text                 | A pre-defined text, such as email   |
+| char_group  | text                 | A predefined character group          |
+| correlation | number, datetime, date, time | An expression or function             |
+| duration    | date, datetime       | A date time range                     |
+| format      | text                 | The text format for a category        |
+| interval    | sequence             | An interval of a sequence             |
+| length      | text                 | A fixed length text value             |
+| precision   | number               | A decimal places of a number          |
+| range       | number               | A range for integral part of a number |
+| size        | text                 | A variant length text value           |
+
+:::warning
+Constraints applied to an incompatible type are ignored.
+:::
+
+### Chain
+A chain is a constraint that ensures generated values are formed in a sequence with predefined intervals. It’s implemented as a Markov chain, where the value of the current element depends on the previous element. The chain constraint is compatible with number, datetime, and date types.
+A chain constraint can be defined using the following properties:
+- **type**: The value needs to be “chain”.
+- **seed**: A positive number that defines the base value difference between two adjacent values.
+- **direction**: Determines how the value changes. When set to 0, the next element can either increase or decrease the previous value. When set to 1, the value always increases, and when set to -1, the value always decreases.
+- **style**: Defines how the seed is used to generate the next number:
+    - When set to 0, the same value of the seed is applied.
+    - When set to 1, a random number between 0 and seed is applied.
+    - When set to 2, a Gaussian random value with mean μ = seed is used.
+
+:::note
+When using Gaussian random, the values used will be tween 0 and 2 * seed to avoid possible value overflow.
+:::
+
+```yaml title="Chain constraint example"
+  # Create incremental datetime starting at any moment after 2023-12-05 00:00:00
+  # and increasing by 8 seconds
+  properties:
+    - name: "incremental_datetime"
+      type: "datetime"
+      constraints:
+        - type: "duration"
+          start:
+            year: 2023
+            month: 12
+            day: 5
+        - type: "chain"
+          seed: 8000
+          direction: 1
+          style: 0
+```
+:::note
+When apply chain constraint to date or datetime type, the seed value is in milliseconds.
+:::
+
+### Category
+A category constraint is used to instruct the generator to use a predefined data provider. For more information, please refer to the [Data Providers](../plan/data-provider) page.
+
+### Character Group
+By default, text values generated are using ASCII alpha numerals characters. It can be changed by applying one ore more character groups listed below.
+
+| Character Group         | Description                                                         |
+|-------------------------|---------------------------------------------------------------------|
+| arabic_numerals         | It represents a number between 0 and 9.                             |
+| ascii_alpha_numerals    | It represents a letter between a and Z or a number between 0 and 9. |
+| ascii_letters           | It represents a letter between a and Z.                             |
+| ascii_lowercase_letters | It represents a letter between a and z.                             |
+| ascii_uppercase_letters | It represents a letter between A and Z.                             |
+| digits                  | It presents any digit character in unicode                          |
+| letters                 | It presents any letter character in unicode                         |
+| ea_hiragana             | It presents Japanese Hiragana characters                            |
+| ea_katakana             | It presents Japanese Katakana characters                            |
+| ea_cjk_a                | It presents east asian CJK group A characters                       |
+
+A character group can be defined using the following properties:
+- **type**: The value needs to be “char_group”.
+- **group**: A list of the character group to be used.
+
+```yaml title="Character group example"
+  # Value generated contains only Japanese characters and Arabic numerals
+  properties:
+    - name: "jp_chars"
+      type: "text"
+      constraints:
+        - type: "char_group"
+          groups:
+            - "ea_hiragana"
+            - "ea_katakana"
+            - "arabic_numerals"
+```
+
+### Correlation
+A correlation constraint functions like a formula that calculates a value from a list of given properties. This constraint is compatible with number, datetime, date, and time types. To use correlation, all involved properties must be of the same data type. You can define the correlation constraint using the following properties:
+- **type**: The value needs to be "correlation".
+- **properties**: A set of properties used in calculation.
+- **formula**: A formula for calculation.
+
+The expression evaluator of project [EvalEx](https://github.com/ezylang/EvalEx) is used to process formulas, you may need to refer to its document for supported functions. For date or datetime, we provide two extra functions:
+
+| Function        | Description                                                               | Example             |
+|-----------------|---------------------------------------------------------------------------|---------------------|
+| TIME_AFTER      | Generate a date/datetime between a given value and 10 years in future     | TIME_AFTER(p1)      |
+| PAST_TIME_AFTER | Generate a date/datetime between a given value and current time           | PAST_TIME_AFTER(p1) |
+
+<Tabs defaultValue="sum" groupId="correlation">
+  <TabItem value="sum" label="Add Two Property Values">
+    ```yaml title="Create text with 5 words"
+        # Use the sum of p1 and p2 as the value of p3
+        properties:
+            - name: "p3"
+              type: "number"
+              constraints:
+                - type: "correlation"
+                  properties: ["p1", "p2"]
+                  formula: "p1 + p2"
+    ```
+  </TabItem>
+  <TabItem value="future" label="A Past Date">
+    # Create a past date time later than the value of "user_created"
+    ``` yaml title="Create a past date"
+        properties:
+          - name: "user_updated"
+            type: "datetime"
+            constraints:
+              - type: "correlation"
+                properties: ["user_created"]
+                formula: "PAST_TIME_AFTER(user_created)"
+    ```
+  </TabItem>
+</Tabs>
+
+### Duration
+Duration defines a date range within which the generated date or datetime needs to fall. A duration has three properties:
+
+- **type**: The value needs to be “duration”.
+- **start**: The earliest time mark.
+- **end**: The latest time mark.
+
+A time mark consists of six properties: year, month (1 - 12), day, hour (0 - 23), minute, and second. These properties are used to define the time boundary with the highest accuracy at the second level.
+
+<Tabs defaultValue="duration1" groupId="duration">
+  <TabItem value="duration1" label="Example 1">
+    ```yaml
+        # Create a date time between 03/01/2023 00:00:00 and 11/10/2023 14:05:30
+        - name: "created"
+          type: "datetime"
+          constraints:
+            - type: duration
+              start:
+                year: 2023
+                month: 3
+                day: 1
+              end:
+                year: 2023
+                month: 11
+                day: 10
+                hour: 14
+                minute: 5
+                second: 30
+    ```
+  </TabItem>
+  <TabItem value="duration2" label="Example 2">
+    ``` yaml
+        # Create a date between 04/22/2023 and today
+        properties:
+          - name: "user_updated"
+            type: "datetime"
+            constraints:
+              - type: "correlation"
+                properties: ["user_created"]
+                formula: "PAST_TIME_AFTER(user_created)"
+    ```
+  </TabItem>
+</Tabs>
+
+### Interval
+An interval defines the base and leap when generating a sequence. It has three properties:
+
+- **type**: The value needs to be “interval”.
+- **base**: The starting integer value of the sequence (default is 1).
+- **leap**: An integer that defines the value difference between two sequence numbers (it’s required).
+
+```yaml title="Interval constraint example"
+  # Create a sequence starting at 100 and increasing by 5
+  properties:
+    - name: "id"
+      type: "sequence"
+      constraints:
+        - type: "interval"
+          base: 100
+          leap: 5
+```
+
+### Length
+Length is the constraint to generate fixed-length text. It has two properties:
+
+- **type**: The value needs to be “length”.
+- **max**: The desired character size.
+
+```yaml title="Create text with 5 characters"
+    properties:
+      - name: "code"
+        type: "text"
+        constraints:
+          - type: length
+            max: 5
+```
+
+### Precision
+Precision is used to define the decimal places of a generated number. If a number type property lacks a precision constraint, only integers will be generated. The precision constraint has two properties:
+
+- **type**: The value needs to be “precision”.
+- **max** The maximum number of decimal places. Its value must be an integer between 0 and 10.
+
+```yaml title="Create a number with 2 decimal places"
+    properties:
+      - name: "price"
+        type: "number"
+        constraints:
+          - type: "precision"
+            max: 2
+```
+
+### Range
+The range constraint is used to define a range of numeric values. It has three properties, and either the ‘min’ or ‘max’ property can be optional:
+
+- **type**: - The value needs to be “range”.
+- **min**: - An inclusive minimum value.
+- **max**: - An exclusive maximum value.
+
+```yaml title="Create a number between 10 and 20"
+    properties:
+      - name: "age"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: 10
+            max: 21
+```
+
+### Size
+The size constraint is used to define the length of a text value. It has two properties:
+- **type**: The value needs to be "size".
+- **min**: An inclusive minimum length.
+- **max**: An exclusive maximum length.
+
+```yaml title="Create text with 5 to 10 characters"
+    properties:
+      - name: "text_sample"
+        type: "text"
+        constraints:
+          - type: "size"
+            min: 5
+            max: 11
+```
