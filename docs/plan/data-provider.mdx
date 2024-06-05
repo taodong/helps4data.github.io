@@ -38,8 +38,8 @@ Data providers can be only applied to text properties. They will be ignored when
 ## Name Provider
 This provider generates random person names:
 - **name**: name
-- **locale**: An IETF BCP 47 language tag string, such as ‘en-US’ or ‘ja-JP’. The default is ‘en-US’.
-- **qualifier**: If ‘firstname’ or ‘lastname’ is not provided, it generates the full name.
+- **locale**: An IETF BCP 47 language tag string, such as `en-US` or `ja-JP`. The default is `en-US`.
+- **qualifier**: If `firstname` or `lastname` is not provided, it generates the full name.
 
 <Tabs defaultValue="name" groupId="name-provider">
   <TabItem value="name" label="Create Full Name">
@@ -76,3 +76,213 @@ This provider generates random person names:
   ```
   </TabItem>
 </Tabs>
+
+## Address Provider
+This provider generates random address
+- **category**: address
+- **locale**: An IETF BCP 47 language tag string, such as `en-US` or `ja-JP`. The default is `en-US`.
+- **qualifier**: It can be `street`, `city`, `state`, `country` or `zip`. Without qualifier value, full address is generated
+
+<Tabs defaultValue="address" groupId="address-provider">
+  <TabItem value="address" label="Create Full Address">
+    ```yaml title="Create full in Taiwan"
+      properties:
+        - name: "full_address_sample"
+          type: "text"
+          constraints:
+            - type: "category"
+              name: "address"
+              locale: "zh-TW"
+    ```
+  </TabItem>
+  <TabItem value="street" label="Create Street Address">
+    ```yaml title="Create Street Address"
+      properties:
+        - name: "street_sample"
+          type: "text"
+          constraints:
+            - type: "category"
+              name: "address"
+              qualifier: "street"
+    ```
+  </TabItem>
+</Tabs>
+
+## Email Provider
+This provider generates random email address
+- **category**: email
+
+```yaml title="Create email address"
+    properties:
+      - name: "email_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "email"
+```
+
+## Id Provider
+This provider generates random ID string with given format, if no format is provided, it generates UUID
+- **category**: id
+- **auxiliary constraints**: format
+```yaml title="Create UUID"
+  properties:
+    - name: "id_sample"
+      type: "text"
+      constraints:
+        - type: "category"
+          name: "id"
+```
+
+### Define Id Format
+Id format can be defined by combining with "format" constraint. Two wildcards are supported: "?" and "#" where "?" represents a random letter and "#" represents a random digit
+
+<Tabs defaultValue="formatted1" groupId="formatted-id-provider">
+  <TabItem value="formatted1" label="Create Formatted ID 1">
+    ```yaml title="Create ID with format ID-##########"
+      # it generates ID starting with "ID-" and ending with 10 random digits
+      properties:
+        - name: "id_formatted_1"
+          type: "text"
+          constraints:
+            - type: "category"
+              name: "id"
+            - type: "format"
+              format: "ID-##########"
+    ```
+  </TabItem>
+  <TabItem value="formatted2" label="Create Formatted ID 2">
+    ```yaml title="Create ID with format 2024.2.???"
+      # it generates ID starting with "2024.2." and ending with 3 random letters
+      properties:
+        - name: "id_formatted_1"
+          type: "text"
+          constraints:
+            - type: "category"
+              name: "id"
+            - type: "format"
+              format: "2024.2.???"
+    ```
+  </TabItem>
+</Tabs>
+
+## IP Address Provider
+This provider generates random IP4 address
+- **category**: ip
+- **auxiliary constraints**: format
+
+```yaml title="Create IP Address"
+properties:
+  - name: "ip_address_sample"
+    type: "text"
+    constraints:
+      - type: "category"
+        name: "ip"
+```
+
+### Define IP Address Masks
+Ip address masks can be defined can be defined by combining with "format" constraint. Masks are defined as a list of strings, each string represents a mask. If more than 1 mask is defined, each mask is applied randomly.
+A mask consists with number parts and the wildcard character (#) parts
+
+**Examples**:
+- "172.0.###.###" - it generates IP addresses starting with 172.0
+- "###.23.5.###" - it generates IP addresses with 23.5 in the middle
+- "172.###.###.5" - it generates IP addresses starting with 172 and ending with 5
+
+```yaml title="Create IP Address with masks"
+### Create IP address in the range between 172.0.0.0 and 172.1.255.255
+properties:
+  - name: "masked_ip_address"
+    type: "text"
+    constraints:
+      - type: "category"
+        name: "ip"
+      - type: "format"
+        format: |
+          - "172.0.###.###"
+          - "172.1.###.###"
+```
+
+:::warning
+The format spec is passed as YAML string in a separate process, please make sure pipe (|) character is at the beginning of the format string
+:::
+
+## Random Text String Provider
+This provider generates random text string. By default the generated text is between 5 and 20 words all in lower case.
+- **category**: text
+- **locale**: `en-US` only
+- **auxiliary constraints**: format, length or size
+
+```yaml title="Create random text string"
+    properties:
+      - name: "text_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "text"
+```
+
+### Word Count
+The number of word of generated text can be defined through either "size" constraint or "length" constraint. For a fixed length, "length" constraint should be used, on the other hand "size" is used for a ranged length.
+
+<Tabs defaultValue="length" groupId="text-word-count">
+  <TabItem value="length" label="Fixed Length Text">
+    ```yaml title="Create text with 5 words"
+        properties:
+            - name: "text_sample"
+                type: "text"
+                constraints:
+                    - type: "category"
+                      name: "text"
+                    - type: "length"
+                      max: 5
+    ```
+  </TabItem>
+  <TabItem value="size" label="Ranged Length Text">
+    ``` yaml title="Create text with 5 to 10 words"
+        properties:
+            - name: "text_sample"
+                type: "text"
+                constraints:
+                    - type: "category"
+                      name: "text"
+                    - type: "size"
+                      min: 5
+                      max: 11
+    ```
+  </TabItem>
+</Tabs>
+
+:::note
+The word count does not include any prefixes and suffixes provided
+:::
+
+### Text Format
+Extra format can be defined through "format" constraint. In a format spec, you can define three extra properties:
+- **prefixes**: list of prefixes to be added to the generated text
+- **suffixes**: list of suffixes to be added to the generated text
+- **style**: style of the generated text, allowed values are:
+    - 1: all lower case, e.g. "hello world"
+    - 2: all upper case, e.g. "HELLO WORLD"
+    - 3: upper case for first character, lower case for others, e.g. "Hello world"
+    - 4: camel case for each word, e.g. "Hello World"
+
+```yaml title="Create text with format"
+properties:
+  - name: "formatted_text"
+    type: "text"
+    constraints:
+      - type: "category"
+        name: "text"
+      - type: "format"
+        format: |
+          prefixes:
+            - "This is"
+          suffixes:
+            - "and that's it"
+          style: 3
+```
+
+:::warning
+The format spec is passed as YAML string in a separate process, please make sure pipe (|) character is at the beginning of the format string
+:::
