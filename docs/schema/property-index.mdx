@@ -1,0 +1,191 @@
+---
+sidebar_position: 2
+sidebar_label: Indexes
+sidebar_clas_name: green
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Indexes
+
+Indexes are used to enforce unique constraints on one or multiple properties under the same entity. This ensures that the generated data is unique and can be used to identify each record uniquely. An index can be defined using the following properties:
+
+- **id**: [required] It should be a non-negative integer. All properties with the same id value are regarded as one index. When its value is 0 and only a single `sequence` type property is included in the index, it generates a sequence starting with 1. This sequence serves a similar purpose as a primary key in a database table.
+- **type**: A predefined integer value with 0 as the default value. The allowed values are:
+    - 0: Regular index
+    - 1: Set index
+    - 2: Non-circular index
+    - 3: Ordered non-circular index
+    - 4: Distinct element index
+- **qualifier**: An integer. It is only used when applying to a non-circular index or an ordered non-circular index. The allowed values for qualifiers are 1 and 2. When applying to a distinct element value index, the allowed value is 1.ly used when applying to non circular index or ordered non circular index, the allowed values are 1 and 2. When applying to distinct element value index, the allowed value is 1.
+
+## Regular Index
+A regular index is simply a unique combination of property values.
+
+<Tabs defaultValue="index" groupId="regular-index">
+  <TabItem value="index" label="Sample Regular Index">
+    ```yaml title="Sample Regular Index"
+        properties:
+          - name: "product_id"
+            type: "sequence"
+            index:
+              id: 1
+          - name: "order_id"
+            type: "sequence"
+            index:
+              id: 1
+    ```
+  </TabItem>
+  <TabItem value="output" label="Sample Output">
+    ``` json title="Sample Regular Indexes Generated"
+        [
+          {"product_id": 1, "order_id": 1},
+          {"product_id": 2, "order_id": 1},
+          {"product_id": 1, "order_id": 2},
+          {"product_id": 2, "order_id": 3},
+          {"product_id": 3, "order_id": 2}
+        ]
+    ```
+  </TabItem>
+</Tabs>
+
+## Set Index
+A set index is used to generate unique combinations of property values, regardless of the property order. For example, when the index values are [1, 2] and [2, 1], they are treated as duplicates.
+
+<Tabs defaultValue="index" groupId="set-index">
+  <TabItem value="index" label="Sample Set Index">
+    ```yaml title="Sample Set Index"
+       properties:
+         - name: "product_id"
+           type: "sequence"
+           index:
+             id: 1
+             type: 1
+         - name: "order_id"
+           type: "sequence"
+           index:
+             id: 1
+             type: 1
+    ```
+  </TabItem>
+  <TabItem value="output" label="Sample Output">
+    ``` json title="Sample Set Indexes Generated"
+        [
+          {"product_id": 1, "order_id": 1},
+          {"product_id": 2, "order_id": 1},
+          {"product_id": 2, "order_id": 3}
+        ]
+    ```
+  </TabItem>
+</Tabs>
+
+## Non-circular Index
+A non-circular index treats each index entry as a branch of a graph. Each branch has a direction from parent to child, with a qualifier value of 1 identifying a parent and 2 identifying a child. A newly generated index is accepted only if the following two conditions are met:
+
+1. The new branch won’t create a cycle with existing values. For example, [1, 1] creates a cycle to itself, and [1, 2] or [2, 1] creates another cycle.
+2. The new branch won’t result in multiple parents for the same child. For instance, in the case of `[{“parent_id”: 1, “child_id”: 3}, {“parent_id”: 2, “child_id”: 3}]`, child_id 3 has two parent_ids: 1 and 2.
+
+<Tabs defaultValue="index" groupId="non-circular-index">
+  <TabItem value="index" label="Sample Non-circular Index">
+    ```yaml title="Sample Non-circular Index"
+       properties:
+         - name: "parent_id"
+           type: "sequence"
+           index:
+             id: 1
+             type: 2
+             qualifier: 1
+         - name: "child_id"
+           type: "sequence"
+           index:
+             id: 1
+             type: 2
+             qualifier: 2
+    ```
+  </TabItem>
+  <TabItem value="output" label="Sample Output">
+    ``` json title="Sample Non-circular Indexes Generated"
+        [
+          {"parent_id": 2, "child_id": 1},
+          {"parent_id": 2, "child_id": 3}
+        ]
+    ```
+  </TabItem>
+</Tabs>
+
+:::warning
+For a non-circular index, qualifier values 1 and 2 should be used in pairs and only once.
+:::
+
+## Ordered Non-circular Index
+An ordered non-circular index is a non-circular index with an additional constraint that ensures the parent ID defined in the index entry is less than the value of the child ID. A sample usage could be to organize a list of comment records that were posted in sequence and replied to each other.
+
+<Tabs defaultValue="index" groupId="ordered-non-circular-index">
+  <TabItem value="index" label="Sample Ordered Non-circular Index">
+    ```yaml title="Sample Ordered Non-circular Index"
+       properties:
+         - name: "parent_id"
+           type: "sequence"
+           index:
+             id: 1
+             type: 3
+             qualifier: 1
+         - name: "child_id"
+           type: "sequence"
+           index:
+             id: 1
+             type: 3
+             qualifier: 2
+    ```
+  </TabItem>
+  <TabItem value="output" label="Sample Output">
+    ``` json title="Sample Ordered Non-circular Indexes Generated"
+        [
+          {"parent_id": 2, "child_id": 4},
+          {"parent_id": 2, "child_id": 3}
+        ]
+    ```
+  </TabItem>
+</Tabs>
+
+:::warning
+To use an ordered non-circular index, the data type of properties used as both parent and child should be same and comparable.
+:::
+
+## Distinct Element Index
+The distinct element index does not allow duplicated values for any marked properties in the index. To mark a property, the qualifier is set to 1. If there are no properties with the qualifier set to 1, the distinct element index works the same as a regular index.
+
+<Tabs defaultValue="index" groupId="distinct-element-index">
+  <TabItem value="index" label="Distinct Element Index">
+    ```yaml title="Sample Distinct Element Index"
+       properties:
+         - name: "from"
+           type: "sequence"
+           index:
+             id: 2
+             type: 4
+             qualifier: 1
+         - name: "to"
+           type: "sequence"
+           index:
+             id: 2
+             type: 4
+             qualifier: 1
+    ```
+  </TabItem>
+  <TabItem value="output" label="Sample Output">
+    ``` json title="Sample Distinct Element Indexes Generated"
+        [
+          {"from": 2, "to": 3},
+          {"from": 3, "to": 2}
+        ]
+    ```
+  </TabItem>
+</Tabs>
+
+
+
+:::note
+Our generator assumes that properties marked by the qualifier have the same data type. To simplify the data type check, the string values of the desired properties are used to guarantee uniqueness.
+:::
