@@ -1,0 +1,54 @@
+---
+sidebar_position: 4
+sidebar_label: Reference
+sidebar_clas_name: green
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Reference
+
+Instead of generating values, a reference applies an existing property value from another entity. It can be used for defining a foreign key reference between two entities. A reference has three properties:
+
+- **entity**: [required] Defines the target entity.
+- **property**: [required] Defines the target property.
+- **linked**: Specifies a linked property value to be referenced. This is useful when multiple properties within the same entity reference the target entity. It ensures that referencing properties always correspond to the same record in the target entity.
+
+<Tabs defaultValue="regular" groupId="reference">
+  <TabItem value="regular" label="Regular Reference">
+    ```yaml title="Regular Reference"
+        # product_id references the id property of the product entity
+        - name: "order_detail"
+          properties:
+            - name: "product_id"
+              type: "sequence"
+              reference:
+                entity: "product"
+                property: "id"
+    ```
+  </TabItem>
+  <TabItem value="linked" label="Linked Reference">
+    ``` yaml title="Linked Reference"
+        # user_id references usr_user.id and user_created references usr_user.created
+        # The value of user_created should be extracted from the same usr_user record as user_id
+        - name: "order_detail"
+          properties:
+            - name: "user_id"
+              type: "sequence"
+              reference:
+                entity: "usr_user"
+                property: "id"
+                linked: "id"
+            - name: "user_created"
+              type: "datetime"
+              reference:
+                entity: "usr_user"
+                property: "created"
+                linked: "id"
+    ```
+  </TabItem>
+</Tabs>
+
+:::warning
+The data type of the referencing and referenced properties must match.
+:::

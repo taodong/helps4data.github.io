@@ -27,10 +27,10 @@ entities:
 A property is a field in an entity that represents a specific attribute of the entity. Each property includes the following fields:
 
 - **name**: [required] Serves as an identifier; no two properties can have the same name under the same entity.
-- **type**: [required] Specifies the target [data type](./schema/data-type).
-- **index**: An [index](./schema/property-index) enforces a unique constraint on one or multiple properties under the same entity.
-- **constraints**: A list of redefined [constraints](./schema/constraints) that provide rules for data generation.
-- **reference**: Refers to a property in another entity.
+- **[type](./schema/data-type)**: [required] Specifies the target data type.
+- **[index](./schema/property-index)**: An index enforces a unique constraint on one or multiple properties under the same entity.
+- **[constraints](./schema/constraints)**: A list of redefined constraints that provide rules for data generation.
+- **[reference](./schema/reference)**: Refers to a property in another entity.
 
 ```yaml title="Sample 'country' entity with three properties"
   - name: country
