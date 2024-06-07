@@ -1,0 +1,72 @@
+name: "sf_plan"
+dialect: "salesforce"
+schema: "sf_accounts"
+data:
+  - entity: "business_account"
+    count: 5
+    properties:
+      - name: "Name"
+        constraints:
+          - type: "category"
+            name: "text"
+          - type: "format"
+            format: |
+              suffixes:
+                - "Hospital"
+                - "Medical Center"
+                - "Clinic"
+              style: 4
+          - type: "size"
+            min: 1
+            max: 4
+      - name: "Active__c"
+        defaultValue: "Yes"
+      - name: "Rating"
+        values:
+          - values:
+              - "Hot"
+              - "Warm"
+              - "Cold"
+            weight: 0.85
+        defaultValue: "<?null?>"
+      - name: "Type"
+        values:
+          - values:
+              - "Prospect"
+              - "Customer - Direct"
+              - "Customer - Channel"
+            weight: 0.7
+          - values:
+              - "Other"
+            weight: 0.3
+  - entity: "contact"
+    count: 1000
+    properties:
+      - name: "Department"
+        values:
+          - values:
+              - "ER"
+              - "Operation Room"
+              - "OB/GYN"
+              - "Pediatrics"
+              - "Family Medical"
+            weight: 1.0
+      - name: "Description"
+        constraints:
+          - type: "category"
+            name: "text"
+      - name: "Title"
+        values:
+          - values:
+              - "Doctor"
+            weight: 0.3
+          - values:
+              - "Nurse"
+              - "Nurse Practitioner"
+            weight: 0.6
+          - values:
+              - "Therapist"
+              - "Medical Assistant"
+            weight: 0.1
+
+

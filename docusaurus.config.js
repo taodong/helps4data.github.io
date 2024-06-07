@@ -84,7 +84,12 @@ module.exports = {
           appId: "OL3E6P4ZV2",
           apiKey: "ade1a6583d188989018937539a1a7e22",
           indexName: "taodongio",
-          contextualSearch: true
+          contextualSearch: false,
+          replaceSearchResultPathname: process.env.NODE_ENV === 'production' ?
+            {
+                from: '/helps4data/',
+                to: '/'
+            } : undefined
       }
     })
 };
