@@ -1,0 +1,29 @@
+---
+sidebar_position: 2
+sidebar_label: Salesforce Orders Example
+sidebar_clas_name: green
+---
+
+# Salesforce Orders Example
+
+This example demonstrates how to generate Salesforce order records and any account, contact, and contract records required by the Order SObject.
+
+## Goal
+Create the following records in Salesforce:
+1. 5 account records
+2. 500 contact records for these 5 accounts
+3. 100 contract records for these 5 accounts
+4. 200 order records under contracts
+
+## Prerequisites
+- Salesforce sandbox or developer account
+- At least 805 records upload capacity on [dataloader.io](https://dataloader.io).
+
+## Preparation Steps
+- Create a custom field "ExtId__c" to `contact` object to allow the records to be referenced in Salesforce. The field type should be text with minimum length 13.
+- Create a custom field "ExtId__c" to `contract` object to allow the records to be referenced in Salesforce. The field type should be text with minimum length 13.
+
+## Data Generation Files
+- <a target="_blank" href="/files/salesforce-orders/schema.yaml" download="schema.yaml">schema file</a>
+- <a target="_blank" href="/files/salesforce-orders/plan.yaml" download="plan.yaml">plan file</a>
+- <a target="_blank" href="/files/salesforce-orders/output.yaml" download="output.yaml">output control file</a>

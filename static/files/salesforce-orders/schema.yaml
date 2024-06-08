@@ -17,10 +17,6 @@ entities:
         type: "text"
         index:
           id: 1
-        constraints:
-          - type: "size"
-            min: 0
-            max: 64
       - name: "AccountNumber"
         type: "text"
         constraints:
@@ -216,9 +212,10 @@ entities:
         index:
           id: 1
         constraints:
-          - type: "size"
-            min: 1
-            max: 80
+          - type: "category"
+            name: "id"
+          - type: "format"
+            format: "OR-##########"
       - name: "AccountId"
         type: "text"
         reference:

@@ -1,4 +1,4 @@
-name: "sf_hw_output"
+name: "sf_order_output"
 entities:
   - name: "account"
     properties:
