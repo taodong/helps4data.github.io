@@ -17,8 +17,12 @@ Create the following records in Salesforce:
 4. 200 order records under contracts
 
 ## Prerequisites
-- Salesforce sandbox or developer account
+- Salesforce sandbox or developer account.
 - At least 805 records upload capacity on [dataloader.io](https://dataloader.io).
+
+## Entity Relationships
+The following diagram illustrates the relationships among the involved Salesforce objects:
+![Entity Relationships](/img/samples/salesforce_order_diagram.png)
 
 ## Preparation Steps
 - Create a custom field "ExtId__c" to `contact` object to allow the records to be referenced in Salesforce. The field type should be text with minimum length 13.
@@ -28,6 +32,13 @@ Create the following records in Salesforce:
 - <a target="_blank" href={useBaseUrl("/files/salesforce-orders/schema.yaml")} download="schema.yaml">schema file</a>
 - <a target="_blank" href={useBaseUrl("/files/salesforce-orders/plan.yaml")} download="plan.yaml">plan file</a>
 - <a target="_blank" href={useBaseUrl("/files/salesforce-orders/output.yaml")} download="output.yaml">output control file</a>
+
+## Output Files
+A successful data generation will create the following files within the `data.zip`. The number trailing the entity name identifies the order in which the data should be applied to Salesforce.
+- account_0.csv
+- contact_1.csv
+- contract_2.csv
+- order_3.csv
 
 ## Notes
 1. To use [dataloader.io](https://dataloader.io) to import Salesforce records, please use "CSV" as the output format.

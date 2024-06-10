@@ -24,6 +24,11 @@ None
 - <a target="_blank" href={useBaseUrl("/files/salesforce-accounts/plan.yaml")} download="plan.yaml">plan file</a>
 - <a target="_blank" href={useBaseUrl("/files/salesforce-accounts/output.yaml")} download="output.yaml">output control file</a>
 
+## Output Files
+A successful data generation will create the following files within the `data.zip`. The number trailing the entity name identifies the order in which the data should be applied to Salesforce.
+- account_0.csv
+- contact_1.csv
+
 ## Notes
 1. To use [dataloader.io](https://dataloader.io) to import Salesforce records, please use "CSV" as the output format.
 2. When mapping contact record, link the "Account ID" field with Lookup via: Account Name.
