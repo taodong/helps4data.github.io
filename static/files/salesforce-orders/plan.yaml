@@ -87,7 +87,7 @@ data:
       - name: "ContractTerm"
         constraints:
           - type: "range"
-            min: 1
+            min: 18
             max: 36
   - entity: "order"
     count: 200

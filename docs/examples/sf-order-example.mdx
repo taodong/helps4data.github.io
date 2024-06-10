@@ -28,3 +28,12 @@ Create the following records in Salesforce:
 - <a target="_blank" href={useBaseUrl("/files/salesforce-orders/schema.yaml")} download="schema.yaml">schema file</a>
 - <a target="_blank" href={useBaseUrl("/files/salesforce-orders/plan.yaml")} download="plan.yaml">plan file</a>
 - <a target="_blank" href={useBaseUrl("/files/salesforce-orders/output.yaml")} download="output.yaml">output control file</a>
+
+## Notes
+1. To use [dataloader.io](https://dataloader.io) to import Salesforce records, please use "CSV" as the output format.
+2. When mapping contact record, link the "Account ID" field with "Lookup via: Account Number".
+3. When mapping contract record, link the "Account ID" field with "Lookup via: Account Number".
+4. When mapping order record, using the following lookups:
+    - Link the "Bill To Contract ID" field with "Lookup via: Contract ExtId".
+    - Link the "Account ID" field with "Lookup via: Account Number".
+    - Link the "Contact ID" field with "Lookup via: Contact ExtId".
