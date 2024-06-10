@@ -3,6 +3,7 @@ sidebar_position: 1
 sidebar_label: Salesforce Accounts Example
 sidebar_clas_name: green
 ---
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Salesforce Accounts Example
 
@@ -19,9 +20,9 @@ Create data for a healthcare system with 5 business units and a total of 1000 co
 None
 
 ## Data Generation Files
-- <a target="_blank" href="/files/salesforce-accounts/schema.yaml" download="schema.yaml">schema file</a>
-- <a target="_blank" href="/files/salesforce-accounts/plan.yaml" download="plan.yaml">plan file</a>
-- <a target="_blank" href="/files/salesforce-accounts/output.yaml" download="output.yaml">output control file</a>
+- <a target="_blank" href={useBaseUrl("/files/salesforce-accounts/schema.yaml")} download="schema.yaml">schema file</a>
+- <a target="_blank" href={useBaseUrl("/files/salesforce-accounts/plan.yaml")} download="plan.yaml">plan file</a>
+- <a target="_blank" href={useBaseUrl("/files/salesforce-accounts/output.yaml")} download="output.yaml">output control file</a>
 
 ## Notes
 1. To use [dataloader.io](https://dataloader.io) to import Salesforce records, please use "CSV" as the output format.

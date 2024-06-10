@@ -5,6 +5,7 @@ sidebar_clas_name: green
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Data Providers
 
@@ -20,8 +21,8 @@ Data providers are a set of constraints that instruct the generator to create me
 | Text String   | text          | A line of formatted text |
 
 The following sample files can be used to generate five records using each provider:
-- <a target="_blank" href="/files/data-provider/schema.yaml" download="schema.yaml">Sample schema file</a>
-- <a target="_blank" href="/files/data-provider/plan.yaml" download="plan.yaml">Sample plan file</a>
+- <a target="_blank" href={useBaseUrl("/files/data-provider/schema.yaml")} download="schema.yaml">Sample schema file</a>
+- <a target="_blank" href={useBaseUrl("/files/data-provider/plan.yaml")} download="plan.yaml">Sample plan file</a>
 
 All data providers are defined with constraints of a `category` type, which comprise four properties:
 
