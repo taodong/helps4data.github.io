@@ -249,8 +249,3 @@ entities:
           entity: "contract"
           property: "ExtId__c"
           linked: "ExtId__c"
-      - name: "TotalAmount"
-        type: "number"
-        constraints:
-          - type: "precision"
-            max: 2

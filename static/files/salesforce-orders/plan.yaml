@@ -100,8 +100,3 @@ data:
             format: "Order-########"
       - name: "Status"
         defaultValue: "Draft"
-      - name: "TotalAmount"
-        constraints:
-          - type: "range"
-            min: 100
-            max: 10000
