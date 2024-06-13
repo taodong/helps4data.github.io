@@ -1,0 +1,17 @@
+# Plan File
+
+A data generation plan focuses on data specifications and requirements for one scenario. For example, in one use case, you may want all users to have subscription records. In another case, you may need thirty percent of users to either have canceled subscriptions or never had one. Without changing your schema definition, the data plan file offers a flexible way to create data to fit your needs. A data plan YAML file has four top-level properties:
+
+- **name**: [required] A string used as an identifier for the plan.
+- **dialect**: A string used to specify the dialect of the plan. Available dialects are: general, MySQL, or Salesforce. The default is general.
+- **schema**: [required] A string used to specify the schema file to be used for the plan.
+- **data**: [required] A list of data specifications. Each element in this list matches one entity in the schema.
+
+```yaml title="Sample Plan File to Generate MySQL Records Against the Quickstart Schema"
+name: "quickstart"
+dialect: "mysql"
+schema: "quickstart"
+data:
+  - entity: "users"
+    count: 10
+```
