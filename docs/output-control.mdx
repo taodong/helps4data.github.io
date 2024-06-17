@@ -1,0 +1,58 @@
+---
+sidebar_position: 4
+sidebar_label: Output Control
+sidebar_clas_name: green
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Output Control File
+The rules defined in the output control file are applied after the data is generated. This allows auxiliary features to be applied before generating the output data files. It’s particularly useful when Unicode or special characters are used in the user’s data model.
+
+The output control file provides the user with two capabilities: replacing names and hiding properties. To define an output control file, you need the following two properties::
+- **name**: [required] A string used as an identifier for the output control file.
+- **entities**: [required] A list of entities to be finalized.
+
+## Entities In Output Control File
+For each entity, an alias can be defined in the output control file. Additionally, an alias can be defined for any property within the entity. Furthermore, properties can be hidden in the output files. Each entry for entities includes the following properties:
+
+- **name**: [required] The name of the entity.
+- **alias**: An alternative name for the entity.
+- **properties**: A list of property specifications that drill down into the rules applying to individual properties.
+
+The entry for properties includes the following properties:
+- **name**: [required] The name of the target property.
+- **hide**: A boolean value (default is false). When set, the data of target property is excluded in the output files.
+- **alias**: An alternative name for the property.
+
+<Tabs defaultValue="replacement"
+    values={[
+        { label: 'Name Replacement', value: 'replacement' },
+        { label: 'Property Hiding', value: 'hidden' }
+    ]}>
+    <TabItem value="replacement">
+        ```yaml title="Sample Name Replacement"
+            # Replace the entity name ‘businessAccount’ with ‘account’
+            # Replace the property name ‘extId’ with ‘external_id’
+            name: "name_replacement"
+            entities:
+              - name: "businessAccount"
+                alias: "account"
+                properties:
+                  - name: "extId"
+                    alias: "external_id"
+        ```
+    </TabItem>
+    <TabItem value="hidden">
+        ```yaml title="Sample Property Hiding"
+            # Hide the property ‘accountRefId’ in the entity ‘contact’
+            name: "property_hiding"
+            entities:
+              - name: "contact"
+                properties:
+                  - name: "accountRefId"
+                    hide: true
+        ```
+    </TabItem>
+</Tabs>

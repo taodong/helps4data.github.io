@@ -151,7 +151,7 @@ Though optional, the output control file enables auxiliary features to be applie
             name: "name_replacement"
             entities:
               - name: "businessAccount"
-                alias: "business_account"
+                alias: "account"
                 properties:
                   - name: "extId"
                     alias: "external_id"
@@ -159,8 +159,8 @@ Though optional, the output control file enables auxiliary features to be applie
     </TabItem>
     <TabItem value="hidden">
         ```yaml title="Sample Property Hiding"
-            # Hide the property ‘password’ in the entity ‘contact’
-            name: "name_replacement"
+            # Hide the property ‘accountRefId’ in the entity ‘contact’
+            name: "property_hiding"
             entities:
               - name: "contact"
                 properties:

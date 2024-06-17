@@ -5,7 +5,7 @@ A data generation plan focuses on data specifications and requirements for one s
 - **name**: [required] A string used as an identifier for the plan.
 - **dialect**: A string used to specify the dialect of the plan. Available dialects are: general, MySQL, or Salesforce. The default is general.
 - **schema**: [required] A string used to specify the schema file to be used for the plan.
-- **data**: [required] A list of data specifications. Each element in this list matches one entity in the schema.
+- **data**: [required] A list of entity data definitions. Each element in this list matches one entity in the schema.
 
 ```yaml title="Sample Plan File to Generate MySQL Records Against the Quickstart Schema"
 name: "quickstart"
@@ -20,4 +20,38 @@ data:
 Dialect specifies the intended platform for the generated data. Different platforms may require data in varying formats or ranges. For instance, the time values generated for MySQL range from ‘-838:59:59’ to ‘838:59:59’, whereas Salesforce uses a 24-hour range. Available dialects are:
 - **general**: Default dialect. No specific platform is targeted. The data generated is based on Java specifications
 - **mysql**: MySQL-specific dialect. The data generated is based on MySQL specifications
-- **Salesforce**: Salesforce-specific dialect. The data generated is based on Salesforce specifications
+- **salesforce**: Salesforce-specific dialect. The data generated is based on Salesforce specifications
+
+## Entity Data Definition
+An entity data definition provides additional specifications for generating data for a specific entity. It includes the following properties:
+
+- **entity**: [required] The name of the targeted entity.
+- **dataId**: A unique non-negative number (default is 0). It’s used when applying exclusivity to the same entity. For example, if there is a user table with a country column, we can use two entity data definitions—one that generates 100 US users and another that generates 50 UK users.
+- **count**: [required] A positive number that defines how many records are needed.
+- **properties**: A list of property specifications that drill down into the rules applying to individual properties.
+- **entries**: This property allows users to plug in their own data. It’s extremely useful for generating data that fits existing records or for obfuscating sensitive data.
+
+```yaml title="Sample Entity Data Definition"
+## Generate 5 records for product_category using the provided name,
+## applying 70% of desc as null and setting all status to ACTIVE
+- entity: "product_category"
+      count: 5
+      properties:
+        - name: "desc"
+          values:
+            - values:
+                - "<?null?>"
+              weight: 0.7
+        - name: "status"
+          defaultValue: "ACTIVE"
+      entries:
+        properties:
+          - "name"
+        values:
+          - ["Electronics"]
+          - ["Computers"]
+          - ["Smart Home"]
+          - ["Home Garden & Tools"]
+          - ["Pet Supplies"]
+          - ["Food & Grocery"]
+```
