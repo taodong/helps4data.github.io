@@ -15,3 +15,9 @@ data:
   - entity: "users"
     count: 10
 ```
+
+## Dialect
+Dialect specifies the intended platform for the generated data. Different platforms may require data in varying formats or ranges. For instance, the time values generated for MySQL range from ‘-838:59:59’ to ‘838:59:59’, whereas Salesforce uses a 24-hour range. Available dialects are:
+- **general**: Default dialect. No specific platform is targeted. The data generated is based on Java specifications
+- **mysql**: MySQL-specific dialect. The data generated is based on MySQL specifications
+- **Salesforce**: Salesforce-specific dialect. The data generated is based on Salesforce specifications
