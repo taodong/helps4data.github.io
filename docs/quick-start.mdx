@@ -24,7 +24,7 @@ For example, if the output format is set to JSON, as illustrated, three files wi
 - posts_2.json
 
 The number trailing the entity name identifies the order in which the data should be applied to the target system, such as MySQL.
-## Schema File
+## [Schema File](./schema)
 The schema file is a YAML file that defines the structure of the data to be generated. It contains the following fields, both of which are required:
 1. **name**: The name of the schema, which serves as an ID to pair with the plan file.
 2. **entities**: A set of entity definitions. At least one entity is required. Entities with the same name are considered duplicates, and this will cause the data generation to fail.
@@ -105,7 +105,7 @@ To support complex data structures, users can define indices, constraints, and r
     </TabItem>
 </Tabs>
 
-## Plan File
+## [Plan File](./plan)
 The plan file, defining the data generation strategy, instructs the generator on using the targeted schema, including record count, additional constraints, and potential value distributions. It contains four primary elements:
 1. **Name**: [required] This is the name of the data plan and can be any text.
 2. **Dialect**: [optional] This refers to the targeted dialect. Supported values are "general", "mysql" and "salesforce". If not specified, the default value is "general".
@@ -134,7 +134,7 @@ For individual properties in entity data, users can optionally define extra spec
             weight: 0.1
         defaultValue: "ACTIVE"
 ```
-## Output Control File
+## [Output Control File](./output-control)
 Though optional, the output control file enables auxiliary features to be applied to the generated data, particularly when Unicode or special characters are used in the user’s data model. The output control file provides the user with two capabilities:
 1. **Name Replacement**: This allows the user to modify the names of entities or properties in the output file.
 2. **Property Hiding**: This provides the user with the flexibility to hide certain properties in the output file.

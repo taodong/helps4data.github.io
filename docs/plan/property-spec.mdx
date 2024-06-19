@@ -1,0 +1,88 @@
+---
+sidebar_position: 2
+sidebar_label: Property Specification
+sidebar_clas_name: green
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+# Property Specification
+
+Property Specification is an optional feature that enables users to define additional specifications for individual properties within entity data. This feature offers users the flexibility to establish constraints, distributions, and default values for each property. It has five properties:
+
+- **name**: The target property name.
+- **values**: A list of property value distributions. For example, 30% of the values generated would be `null`.
+- **defaultValue**: A string representation of a default value for the target property.
+- **referenceStrategy**: If the target property is a reference property, this defines how the referenced values are applied.
+- **[constraints](../schema/constraints)**: A list of additional constraints to be applied to this property.
+
+## Value Distribution
+Values Distribution enables users to apply predefined values to an approximate percentage of records. The `values` property includes two sub-properties:
+
+- **values**: A set of string representations of the desired values.
+- **weight**: A double value that defines the percentage of records to which the values will be applied.
+
+**Value Set**
+
+Regardless of the data type of the property, the element used in the values property should be text. For number-type values, the numeric values should be enclosed in double quotes. If there are multiple values provided, these values will be assigned randomly.
+
+**Weight**
+
+The weight value is a double number in the close-open range between 0 and 1, denoted as (0, 1]. The sum of all weights must be less than or equal to 1.0.
+
+### Weight Distribution Guidelines
+1. **Weight Distribution**: It is applied as an approximate percentage. For instance, if the weight is set to ( 0.1 ), the corresponding value will be applied to approximately ( 10% ) of the records.
+2. **Multiple Values**: When multiple values are present within the same set, the total number of records assigned to these values will approximately match the specified weight. However, there is no guarantee that the values will be distributed evenly or that a specific value will be utilized.
+
+<Tabs defaultValue="aggregation" groupId="value-distribution">
+  <TabItem value="aggregation" label="Apply Total Weight">
+    ```yaml title="Total Weight Distribution"
+    # For the ‘status’ property, approximately 25% of the records will have
+    # the value either ‘CLOSED’ or ‘RETURNED’.
+    properties:
+      - name: "status"
+        values:
+          - values:
+              - "CLOSED"
+              - "RETURNED"
+            weight: 0.25
+
+    ```
+  </TabItem>
+  <TabItem value="individual" label="Apply Individual Weight">
+    ```yaml title="Individual Weight Distribution"
+      # For the ‘status’ property, approximately 10% of the records will have the value ‘CLOSED’
+      # and 15% will have the value ‘RETURNED’.
+      properties:
+        - name: "status"
+          values:
+            - values:
+                - "CLOSED"
+              weight: 0.1
+            - values:
+                - "RETURNED"
+              weight: 0.15
+    ```
+  </TabItem>
+</Tabs>
+
+## Default Value
+If a default value is provided, it will be applied according to the following rules:
+
+1. **Given Value Presence**: If the target property has a specified values provided in entries, the default value is disregarded during the generation of those entries.
+2. **Defined Values**: If values are specified, the default value is overlooked when generating records within the percentage outlined in values.
+3. **Default Value Application**: The default value will be applied to all records not addressed by rules 1 and 2.
+
+```yaml title="Default Value Specification"
+# For the ‘status’ property, set ‘ACTIVE’ to approximately 80% of records.
+# All the rest of the records will have the value ‘null’.
+properties
+    - name: "status"
+        values:
+        - values:
+            - "ACTIVE"
+            weight: 0.8
+        defaultValue: "<?null?>"
+```
