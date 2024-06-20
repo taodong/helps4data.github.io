@@ -1,0 +1,39 @@
+---
+sidebar_position: 3
+sidebar_label: Data Injection
+sidebar_clas_name: green
+---
+
+# Data Injection
+It’s a common scenario to want to inject your own data into the generated data. Some typical use cases include: obfuscating sensitive information, supplementing with additional data, or incorporating data from an alternative source. The ‘entries’ feature in the plan file provides you with considerable flexibility to accomplish these objectives.
+
+## Define Entries
+An `entries` element comprises the following two attributes:
+
+- **properties**: A list of property names to which values will be assigned.
+- **values**: A list of records that will be utilized. Each defined record should contain the same number of values as specified in ‘properties’. All the values provided within a record must be in text format, denoted with double quotes at both ends.
+
+```yaml title="Sample entries"
+- entity: "product"
+  count: 10
+  entries:
+    properties:
+      - "name"
+      - "desc"
+      - "sku"
+      - "category_id"
+    values:
+      - ["tv_1", "desc_1", "elect00001", "1"]
+      - ["tv_2", "desc_2", "elect00002", "1"]
+      - ["hp_win", "a computer", "comp000001", "2"]
+```
+
+## Rules for Applying Entries
+When applying entries, the following rules are enforced:
+
+1. The records provided in the ‘entries’ are utilized in the specified order before the commencement of any generation.
+2. If the properties listed do not encompass all the properties of the entity, the unlisted properties will be generated according to the user’s configuration.
+3. If the number of records provided in ‘entries’ is less than the specified count, the additional records will be generated in accordance with the user’s configuration.
+
+For example, to obfuscate sensitive information, you can simply exclude any sensitive data when defining the entries.
+

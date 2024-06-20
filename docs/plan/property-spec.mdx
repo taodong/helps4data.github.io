@@ -71,7 +71,7 @@ The weight value is a double number in the close-open range between 0 and 1, den
 ## Default Value
 If a default value is provided, it will be applied according to the following rules:
 
-1. **Given Value Presence**: If the target property has a specified values provided in entries, the default value is disregarded during the generation of those entries.
+1. **Given Value Presence**: If the target property has a specified values provided in [entries](./user-entries), the default value is disregarded during the generation of those entries.
 2. **Defined Values**: If values are specified, the default value is overlooked when generating records within the percentage outlined in values.
 3. **Default Value Application**: The default value will be applied to all records not addressed by rules 1 and 2.
 
@@ -86,3 +86,41 @@ properties
             weight: 0.8
         defaultValue: "<?null?>"
 ```
+
+## Reference Strategy
+The Reference Strategy is utilized when the target property is a reference property. It delineates the method of applying the referenced values. The Reference Strategy can assume one of two values:
+
+- **random**: It's the default strategy. The referenced values are applied in a random order.
+- **loop**: The referenced values are applied in a sequential manner. Should the number of records surpass the number of referenced values, the values will be recycled.
+
+<Tabs defaultValue="plan" groupId="reference-strategy">
+  <TabItem value="plan" label="Loop Strategy Plan File Example">
+    ```yaml title="Apply Loop Strategy"
+    - entity: "comment_comment"
+      count: 30
+      properties:
+        - name: "parent"
+          referenceStrategy: "loop"
+    ```
+  </TabItem>
+  <TabItem value="schema" label="Schema File for Loop Strategy Example">
+    ```yaml title="Referenced Property As Index"
+    - name: "comment_comment"
+      properties:
+        - name: "parent"
+          type: "sequence"
+          index:
+            id: 1
+            type: 3
+            qualifier: 1
+          reference:
+            entity: "comment"
+            property: "id"
+            linked: "post_id"
+    ```
+  </TabItem>
+</Tabs>
+
+:::tip
+In scenarios with a high likelihood of collisions, if your payment plan does not permit an increase in the maximum collision count, employing the `loop` strategy significantly reduces the chance of generation failure.
+:::
