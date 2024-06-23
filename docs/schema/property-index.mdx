@@ -20,6 +20,10 @@ Indexes are used to enforce unique constraints on one or multiple properties und
     - 4: Distinct element index
 - **qualifier**: An integer. It is only used when applying to a non-circular index or an ordered non-circular index. The allowed values for qualifiers are 1 and 2. When applying to a distinct element value index, the allowed value is 1.ly used when applying to non circular index or ordered non circular index, the allowed values are 1 and 2. When applying to distinct element value index, the allowed value is 1.
 
+:::warning
+Properties with correlation constraints or alternation constraints are considered deferred properties. They should not be included in an index because their values are not available when the index is calculated.
+:::
+
 ## Regular Index
 A regular index is simply a unique combination of property values.
 
