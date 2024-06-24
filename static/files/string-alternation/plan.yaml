@@ -1,0 +1,9 @@
+name: "alternation"
+dialect: "general"
+schema: "alternation"
+data:
+  - entity: "samples"
+    count: 10
+    properties:
+      - name: "delimiter"
+        defaultValue: " - "

@@ -1,0 +1,61 @@
+name: "alternation"
+entities:
+  - name: "samples"
+    properties:
+      - name: "id"
+        type: "sequence"
+        index:
+          id: 0
+      - name: "text1"
+        type: "text"
+        constraints:
+          - type: "char_group"
+            groups:
+              - "ascii_alpha_numerals"
+          - type: "size"
+            min: 8
+            max: 12
+        index:
+          id: 1
+      - name: "text2"
+        type: "text"
+        constraints:
+          - type: "char_group"
+            groups:
+              - "ascii_alpha_numerals"
+          - type: "size"
+            min: 8
+            max: 10
+      - name: "delimiter"
+        type: "text"
+      - name: "concatenated_text"
+        type: "text"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "text1"
+              - "text2"
+              - "delimiter"
+            formula: "text1 + delimiter + text2"
+      - name: "bcrypt_hash"
+        type: "text"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "text1"
+            formula: "BCRYPT(text1)"
+      - name: "bcrypt_strength"
+        type: "text"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "text1"
+            formula: "BCRYPT_STRENGTH(text1, 5)"
+      - name: "pbkdf2"
+        type: "text"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "text1"
+              - "text2"
+            formula: "PBKDF2_SHA1(text2, 16, 1000, text1)"
