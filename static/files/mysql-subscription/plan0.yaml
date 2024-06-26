@@ -1,0 +1,78 @@
+name: "subscription_admin"
+dialect: "mysql"
+schema: "subscription_admin"
+data:
+  - entity: "organization"
+    count: 10
+    properties:
+      - name: "name"
+        constraints:
+          - type: "category"
+            name: "text"
+          - type: "format"
+            format: |
+              style: 4
+              suffixes:
+                - "Inc."
+                - "Corp."
+                - "LLC"
+          - type: "size"
+            min: 1
+            max: 5
+  - entity: "user"
+    count: 10
+    properties:
+      - name: "organization_id"
+        referenceStrategy: "loop"
+      - name: "name"
+        constraints:
+          - type: "category"
+            name: "name"
+      - name: "raw_password"
+        defaultValue: "Passw@rd24"
+      - name: "password"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "raw_password"
+            formula: "BCRYPT(raw_password)"
+      - name: "credential_type"
+        defaultValue: "1"
+      - name: "user_type"
+        defaultValue: "1"
+  - entity: "payment_method"
+    count: 10
+    properties:
+      - name: "user_id"
+        referenceStrategy: "loop"
+      - name: "credit_card_number"
+        constraints:
+          - type: "category"
+            name: "credit_card"
+          - type: "format"
+            format: |
+              - network: "visa"
+              - network: "mastercard"
+              - network: "amex"
+      - name: "billing_address"
+        constraints:
+          - type: "category"
+            name: "address"
+      - name: "expiration_month"
+        constraints:
+          - type: "range"
+            min: 1
+            max: 13
+      - name: "expiration_year"
+        constraints:
+          - type: "range"
+            min: 2025
+            max: 2029
+      - name: "cvv"
+        constraints:
+          - type: "size"
+            min: 3
+            max: 4
+          - type: "char_group"
+            groups:
+              - "arabic_numerals"

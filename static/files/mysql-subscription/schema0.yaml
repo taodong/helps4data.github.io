@@ -1,0 +1,94 @@
+name: "subscription_admin"
+entities:
+  - name: "organization"
+    properties:
+      - name: "id"
+        type: "sequence"
+        index:
+          id: 0
+      - name: "name"
+        type: "text"
+        constraints:
+          - type: "size"
+            min: 8
+            max: 60
+        index:
+          id: 1
+      - name: "created_at"
+        type: "datetime"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2023
+              month: 10
+            end:
+              year: 2024
+              month: 2
+  - name: "user"
+    properties:
+      - name: "id"
+        type: "sequence"
+        index:
+          id: 0
+      - name: "organization_id"
+        type: "sequence"
+        reference:
+          entity: "organization"
+          property: "id"
+        index:
+          id: 2
+      - name: "email"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "email"
+        index:
+          id: 1
+      - name: "name"
+        type: "text"
+        index:
+          id: 1
+      - name: "raw_password"
+        type: "text"
+      - name: "password"
+        type: "text"
+      - name: "credential_type"
+        type: "sequence"
+      - name: "user_type"
+        type: "sequence"
+      - name: "created_at"
+        type: "datetime"
+        reference:
+          entity: "organization"
+          property: "created_at"
+
+  - name: "payment_method"
+    properties:
+      - name: "id"
+        type: "sequence"
+        index:
+          id: 0
+      - name: "user_id"
+        type: "sequence"
+        reference:
+          entity: "user"
+          property: "id"
+          linked: "id"
+        index:
+          id: 1
+      - name: "credit_card_number"
+        type: "text"
+      - name: "name_on_card"
+        type: "text"
+        reference:
+          entity: "user"
+          property: "name"
+          linked: "id"
+      - name: "billing_address"
+        type: "text"
+      - name: "expiration_month"
+        type: "number"
+      - name: "expiration_year"
+        type: "number"
+      - name: "cvv"
+        type: "text"

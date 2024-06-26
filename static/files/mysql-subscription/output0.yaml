@@ -1,0 +1,6 @@
+name: "subscription_admin"
+entities:
+  - name: "user"
+    properties:
+      - name: "raw_password"
+        hide: true
