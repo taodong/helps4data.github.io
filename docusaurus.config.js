@@ -12,10 +12,10 @@ module.exports = {
   favicon: 'img/favicon.png',
 
   // Set the production url of your site here
-  url: 'https://taodong.github.io',
+  url: 'https://docs.wedgeup.com/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: process.env.NODE_ENV === 'production' ? '/helps4data/' : '/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
