@@ -1,0 +1,148 @@
+---
+sidebar_label: String Alternation
+sidebar_clas_name: green
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+
+# String Alternation
+String alternation is a constraint that enables you to manipulate string values, including concatenation and hashing. It’s particularly useful when you need to generate a new string based on existing property values.
+While it can be used in both `schema` and `plan` configuration files, it is recommended to be employed in the `plan` configuration.
+
+Supported types of string alternation are:
+- concatenation
+- bcrypt hashing
+- pbkdf2 hashing
+
+Like [correlation](../schema/constraints#correlation) constraints, string alternation uses properties follows:
+- **type**: The value needs to be "alternation".
+- **properties**: A set of properties used to generate the new string value.
+- **formula**: A formula of how the new values should be used.
+
+**Sample Files**
+- **<a target="_blank" href={useBaseUrl("/files/string-alternation/schema.yaml")} download="schema.yaml">schema file</a>**
+- **<a target="_blank" href={useBaseUrl("/files/string-alternation/plan.yaml")} download="plan.yaml">plan file</a>**
+- **<a target="_blank" href={useBaseUrl("/files/string-alternation/output.yaml")} download="output.yaml">output control file</a>**
+
+## Concatenation
+Concatenation allows you to join multiple string values together using the `+` operator.
+
+The following example demonstrates how to concatenate two string properties "text1" and "text2" using hyphen as a delimiter:
+
+<Tabs defaultValue="schema" groupId="join-string">
+  <TabItem value="schema" label="Schema File">
+    ```yaml title="Schema File"
+      - name: "text1"
+        type: "text"
+        constraints:
+          - type: "char_group"
+            groups:
+              - "ascii_alpha_numerals"
+          - type: "size"
+            min: 8
+            max: 12
+        index:
+          id: 1
+      - name: "text2"
+        type: "text"
+        constraints:
+          - type: "char_group"
+            groups:
+              - "ascii_alpha_numerals"
+          - type: "size"
+            min: 8
+            max: 10
+      - name: "delimiter"
+        type: "text"
+      - name: "concatenated_text"
+        type: "text"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "text1"
+              - "text2"
+              - "delimiter"
+            formula: "text1 + delimiter + text2"
+    ```
+  </TabItem>
+  <TabItem value="plan" label="Plan File">
+  ```yaml title="Define Delimiter in Plan File"
+  - entity: "samples"
+    count: 10
+    properties:
+      - name: "delimiter"
+        defaultValue: " - "
+  ```
+  </TabItem>
+  <TabItem value="output" label="Output Control">
+    ```yaml title="Hide Delimiter in Output Control"
+      entities:
+        - name: "samples"
+          properties:
+            - name: "delimiter"
+              hide: true
+    ```
+  </TabItem>
+</Tabs>
+
+
+:::note
+For concatenation, provide all string values through entity properties. If you want to use a delimiter for string join, declare it as a separate property (and hide it from the output).
+:::
+
+## Bcrypt
+It hashes a string value using the bcrypt algorithm. There are two implementations exist:
+- BCRYPT(rawpass): The bcrypt algorithm with a strength of 10.
+- BCRYPT_STRENGTH(rawpass, strength): The bcrypt algorithm allows specifying the cost (strength) of the hashing algorithm (between 4 and 10) for performance reasons.
+
+<Tabs defaultValue="bcrypt" groupId="bcrypt">
+  <TabItem value="bcrypt" label="BCRYPT Function">
+  ```yaml title="Encrypt property text1 with BCRYPT"
+  - name: "bcrypt_hash"
+    type: "text"
+    constraints:
+      - type: "alternation"
+        properties:
+          - "text1"
+        formula: "BCRYPT(text1)"
+  ```
+  </TabItem>
+  <TabItem value="bcyrpt2" label="BCRYPT_STRENGTH Function">
+    ```yaml title="Encrypt property text1 with Strength 5 BCRYPT"
+    - name: "bcrypt_strength"
+      type: "text"
+      constraints:
+        - type: "alternation"
+          properties:
+            - "text1"
+          formula: "BCRYPT_STRENGTH(text1, 5)"
+    ```
+  </TabItem>
+</Tabs>
+
+## PBKDF2
+Hashes a string value using the PBKDF2(PBKDF2WithHmacSHA1) algorithm.
+```yaml title="Encrypt property text1 with PBKDF2 using the value of text2 as secret"
+# The PBKDF2_SHA1 function takes 4 parameters:
+# PBKDF2_SHA1(secret, saltLength, iterations, rawPassword)
+# - secret: The secret used to generate the hash
+# - saltLength: The length of the salt
+# - iterations: The number of iterations
+# - rawPassword: The password to hash
+- name: "pbkdf2"
+  type: "text"
+  constraints:
+    - type: "alternation"
+      properties:
+        - "text1"
+        - "text2"
+      formula: "PBKDF2_SHA1(text2, 16, 1000, text1)"
+```
+
+:::danger
+The PBKDF2 implementation uses Pbkdf2PasswordEncoder from SpringBootSecurity 6.3.0. Keep in mind that if your backend uses a different encoder, the hashed value may not match.
+:::
+
+

@@ -13,6 +13,7 @@ Constraints are rules used to ensure that the generated data meet the requiremen
 
 | Name        | Compatible Type      | Description                           |
 |-------------|----------------------|---------------------------------------|
+| alternation | text                 | Value alternation for text   |
 | chain       | number, datetime, date | A Markov chain on records generated in sequence   |
 | category    | text                 | A pre-defined text, such as email   |
 | char_group  | text                 | A predefined character group          |
@@ -28,6 +29,9 @@ Constraints are rules used to ensure that the generated data meet the requiremen
 :::warning
 Constraints applied to an incompatible type are ignored.
 :::
+
+### Alternation
+String alternation is a constraint that enables you to manipulate string values, including concatenation and hashing. For more information, please refer to the [String Alternation](../plan/string-alternation) page.
 
 ### Chain
 A chain is a constraint that ensures generated values are formed in a sequence with predefined intervals. It’s implemented as a Markov chain, where the value of the current element depends on the previous element. The chain constraint is compatible with number, datetime, and date types.
