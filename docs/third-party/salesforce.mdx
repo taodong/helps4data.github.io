@@ -1,0 +1,37 @@
+---
+sidebar_label: Salesforce
+sidebar_clas_name: green
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Salesforce
+
+To generate Salesforce data, make sure to specify the `dialect` as `salesforce` in your data plan file.
+
+```yaml title="salesforce.plan.yaml"
+name: "sf_type_map_plan"
+dialect: "salesforce"
+```
+
+## Supported Data Types
+The supported data types for Salesforce are:
+
+| Salesforce Data Type | Mapped Type             |
+|----------------------|-------------------------|
+| Checkbox             | boolean                 |
+| Currency             | number with constraints |
+| Date                 | date                    |
+| Date/Time            | datetime                |
+| Email                | text with constraints   |
+| Number               | number                  |
+| Percent              | number with constraints |
+| Phone                | text with constraints   |
+| Picklist             | text with values        |
+| Text                 | text                    |
+| Time                 | time                    |
+| URL                  | text with constraints   |
+
+**Sample Data Order**
+- <a target="_blank" href={useBaseUrl("/files/salesforce-types/schema.yaml")} download="schema.yaml">schema file</a>
+- <a target="_blank" href={useBaseUrl("/files/salesforce-types/plan.yaml")} download="plan.yaml">plan file</a>
