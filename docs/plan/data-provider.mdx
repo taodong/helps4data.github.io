@@ -110,7 +110,8 @@ This provider generates random address
 </Tabs>
 
 ## Email Provider
-This provider generates random email address
+This provider generates random email address.
+
 - **category**: email
 
 ```yaml title="Create email address"
@@ -121,6 +122,13 @@ This provider generates random email address
           - type: "category"
             name: "email"
 ```
+:::note
+Our default Email provider generates Gmail type email addresses with four parts `<prefix>.<suffix>@<domain>.<domain_type>`, e.g. `sdfd.fds2@fesfs.com`
+- prefix: 3 to 8 character long random string
+- suffix: 3 to 8 character long random string
+- domain: 3 to 8 character long random string
+- domain_type: random value from "com", "info", "org", "net", "inc", "app", "ai" or "io"
+:::
 
 ## Id Provider
 This provider generates random ID string with given format, if no format is provided, it generates UUID
