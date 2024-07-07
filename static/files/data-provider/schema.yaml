@@ -143,3 +143,25 @@ entities:
             format: |
               - "172.0.###.###"
               - "172.1.###.###"
+      ## Credit Card Number Provider
+      ## This provider generates random credit card number
+      ##  - category name: credit_card
+      ##  - auxiliary constraints: format
+      ## Usage:
+      ## 1. Define Credit Card Formats
+      ## Credit card formats can be defined through "format" constraint
+      ## The format spec is passed as YAML string in a separate process, please make sure pipe (|) character is at the beginning of the format string
+      ## The format is defined as a list of credit card format, each format has the following properties:
+      ##  - network: network of the credit card, allowed values are visa, mastercard, amex, discover, custom
+      ##  - allLengths: boolean value, default is false which generate 16 digits number only, when it's true, it generates all lengths for that network, for visa, the card number length is either 16 digits or 19 digits
+      ##  - prefixes: list of prefixes used for the credit card number, when specified, the network property is ignored
+      - name: "credit_card_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "credit_card"
+          - type: "format"
+            format: |
+              - network: "visa"
+              - network: "mastercard"
+              - network: "amex"
