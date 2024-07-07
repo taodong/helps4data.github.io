@@ -13,12 +13,13 @@ Data providers are a set of constraints that instruct the generator to create me
 
 | Provider Name | Category Name | Description              |
 |---------------|---------------|--------------------------|
-| Name          | name          | A person name            |
-| Address       | address       | An address               |
-| Email         | email         | An email                 |
-| Id            | id            | Id String                |
-| IP Address    | ip            | IP4 address              |
-| Text String   | text          | A line of formatted text |
+| [Name](#name-provider)          | name          | A person name            |
+| [Address](#address-provider)       | address       | An address               |
+| [Email](#email-provider)         | email         | An email                 |
+| [Id](#id-provider)            | id            | Id String                |
+| [IP Address](#ip-address-provider)    | ip            | IP4 address              |
+| [Text String](#random-text-string-provider)   | text          | A line of formatted text |
+| [Credit Card](#credit-card-number-provider)   | credit_card   | A credit card number     |
 
 The following sample files can be used to generate five records using each provider:
 - <a target="_blank" href={useBaseUrl("/files/data-provider/schema.yaml")} download="schema.yaml">Sample schema file</a>
@@ -257,7 +258,7 @@ The number of word of generated text can be defined through either "size" constr
                       name: "text"
                     - type: "size"
                       min: 5
-                      max: 11
+                      max: 10
     ```
   </TabItem>
 </Tabs>
@@ -291,6 +292,76 @@ properties:
             - "and that's it"
           style: 3
 ```
+
+:::warning
+The format spec is passed as YAML string in a separate process, please make sure pipe (|) character is at the beginning of the format string
+:::
+
+## Credit Card Number Provider
+This provider generates a random credit card number that satisfies the Luhn algorithm. By default, it generates a 16-digit credit card number for Visa, MasterCard, American Express, or Discover card types.
+
+```yaml title="Create credit card number"
+properties:
+  - name: "credit_card_sample"
+    type: "text"
+    constraints:
+      - type: "category"
+        name: "credit_card"
+```
+
+### Credit Card Number Format
+Extra format can be defined through the `format` constraint. The format is defined as a list of credit card formats, each with the following properties:
+- **network**: network of the credit card, allowed values are visa, mastercard, amex, discover or custom. When it's custom, the prefixes property should be provided.
+- **allLengths**: boolean value, default is false which generates 16 digits number only, when it's true, it generates all lengths for that network, for visa, the card number length is either 16 digits or 19 digits
+- **prefixes**: list of prefixes used for the credit card number, when specified, the network property is ignored. It is recommended to use with `custom` network type.
+
+<Tabs defaultValue="network" groupId="credit_card">
+  <TabItem value="network" label="Define Networks">
+    ```yaml title="Create Credit Card Number for Visa or MasterCard"
+    properties:
+      - name: "credit_card_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "credit_card"
+          - type: "format"
+            format: |
+              - network: "visa"
+              - network: "mastercard"
+    ```
+  </TabItem>
+  <TabItem value="length" label="Multiple Card Number Length">
+    ``` yaml title="Create Both 16 and 19 Digits Visa Card Number"
+    properties:
+      - name: "credit_card_sample"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "credit_card"
+          - type: "format"
+            format: |
+              - network: "visa"
+                allLengths: true
+    ```
+  </TabItem>
+  <TabItem value="custom" label="Create Custom Card">
+      ``` yaml title="Create 16 JCB Style Card Number"
+      properties:
+        - name: "credit_card_sample"
+          type: "text"
+          constraints:
+            - type: "category"
+              name: "credit_card"
+            - type: "format"
+              format: |
+                - network: "custom"
+                  prefix:
+                    - "3528"
+                    - "3529"
+                    - "3530"
+      ```
+    </TabItem>
+</Tabs>
 
 :::warning
 The format spec is passed as YAML string in a separate process, please make sure pipe (|) character is at the beginning of the format string
