@@ -1,0 +1,20 @@
+name: "mysql_type_map_plan"
+dialect: "mysql"
+schema: "mysql_type_map"
+data:
+  - entity: "mysql_type_map"
+    count: 10
+    properties:
+      - name: "my_bool"
+        values:
+          - values:
+              - 0
+              - 1
+            weight: 1.0
+      - name: "my_enum"
+        values:
+          - values:
+              - "item1"
+              - "item2"
+              - "item3"
+            weight: 1.0

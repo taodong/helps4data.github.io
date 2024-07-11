@@ -1,0 +1,58 @@
+---
+sidebar_label: MySQL
+sidebar_clas_name: green
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# MySQL
+
+To generate MySQL data, make sure to specify the `dialect` as `mysql` in your data plan file.
+
+```yaml title="mysql.plan.yaml"
+name: "mysql_type_map_plan"
+dialect: "mysql"
+```
+
+## Supported Data Types
+The supported data types for MySQL are:
+
+| MySQL Data Type | Mapped Type             |
+|-----------------|-------------------------|
+| BOOLEAN         | number with values      |
+| INT             | number                  |
+| DECIMAL         | number with constraints |
+| FLOAT           | number with constraints |
+| DOUBLE          | number with constraints |
+| DATE            | date                    |
+| TIME            | time                    |
+| DATETIME        | datetime                |
+| TIMESTAMP       | datetime                |
+| CHAR            | text with constraints   |
+| VARCHAR         | text with constraints   |
+| TEXT            | text                    |
+| ENUM            | text with values        |
+
+**Sample Data Order**
+To generate data for the following table, you can use the schema and plan file below.
+```mysql title="Sample MySQL Data Type Table"
+CREATE TABLE `hw`.`mysql_type_map` (
+  `my_bool` TINYINT NOT NULL,
+  `my_int` INT NOT NULL,
+  `my_decimal` DECIMAL(4,2) NOT NULL,
+  `my_float` FLOAT NOT NULL,
+  `my_double` DOUBLE NOT NULL,
+  `my_date` DATE NOT NULL,
+  `my_datetime` DATETIME NOT NULL,
+  `my_timestamp` TIMESTAMP NOT NULL,
+  `my_time` TIME NOT NULL,
+  `my_char` CHAR(10) NOT NULL,
+  `my_vchar` VARCHAR(45) NOT NULL,
+  `my_text` TEXT(100) NOT NULL,
+  `my_enum` ENUM('item1', 'item2', 'item3') NOT NULL);
+```
+- <a target="_blank" href={useBaseUrl("/files/mysql-types/schema.yaml")} download="schema.yaml">schema file</a>
+- <a target="_blank" href={useBaseUrl("/files/mysql-types/plan.yaml")} download="plan.yaml">plan file</a>
+

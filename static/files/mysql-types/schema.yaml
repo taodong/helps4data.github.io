@@ -1,0 +1,100 @@
+# MySqL Data Type Mapping Sample
+name: "mysql_type_map"
+entities:
+  - name: "mysql_type_map"
+    properties:
+      - name: "my_bool"
+        type: "number"
+      - name: "my_int"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: 0
+            max: 99999
+      - name: "my_decimal"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: 0
+            max: 99
+          - type: "precision"
+            max: 2
+      - name: "my_float"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: -9999
+            max: 9999
+          - type: "precision"
+            max: 4
+      - name: "my_double"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: -9999
+            max: 9999
+          - type: "precision"
+            max: 6
+      - name: "my_date"
+        type: "date"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2000
+              month: 1
+              day: 2
+            end:
+              year: 2023
+              month: 12
+              day: 31
+      - name: "my_datetime"
+        type: "datetime"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2023
+              month: 12
+              day: 20
+            end:
+              year: 2023
+              month: 12
+              day: 20
+              hour: 23
+              minute: 59
+              second: 59
+      - name: "my_timestamp"
+        type: "datetime"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2023
+              month: 12
+              day: 20
+            end:
+              year: 2023
+              month: 12
+              day: 20
+              hour: 23
+              minute: 59
+              second: 59
+      - name: "my_time"
+        type: "time"
+      - name: "my_char"
+        type: "text"
+        constraints:
+          - type: "length"
+            max: 10
+      - name: "my_vchar"
+        type: "text"
+        constraints:
+          - type: "size"
+            min: 1
+            max: 45
+      - name: "my_text"
+        type: "text"
+        constraints:
+          - type: "size"
+            min: 1
+            max: 100
+      - name: "my_enum"
+        type: "text"
