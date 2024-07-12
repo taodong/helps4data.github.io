@@ -1,0 +1,22 @@
+---
+sidebar_position: 5
+sidebar_label: Miscellaneous
+sidebar_clas_name: green
+---
+
+# Miscellaneous
+
+## Null Value
+In order to handle `null` value properly cross different data formats, please use the special string `<?null?>` when setting a `null` value in our configuration.
+
+```yaml title="Sample Null Value Usage"
+# Apply about 70% of the "desc" property in the "product" entity to be null
+    - entity: "product"
+      count: 5
+      properties:
+        - name: "desc"
+          values:
+            - values:
+                - "<?null?>"
+              weight: 0.7
+```
