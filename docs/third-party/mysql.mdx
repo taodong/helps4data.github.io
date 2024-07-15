@@ -56,3 +56,26 @@ CREATE TABLE `hw`.`mysql_type_map` (
 - <a target="_blank" href={useBaseUrl("/files/mysql-types/schema.yaml")} download="schema.yaml">schema file</a>
 - <a target="_blank" href={useBaseUrl("/files/mysql-types/plan.yaml")} download="plan.yaml">plan file</a>
 
+### BOOLEAN
+MySQL BOOLEAN data type is mapped by a number data type with values constraint.
+
+<Tabs defaultValue="plan" groupId="boolean">
+  <TabItem value="schema" label="Define Boolean Field">
+    ```yaml title="Define Boolean Field"
+    properties:
+      - name: "my_bool"
+        type: "number"
+    ```
+  </TabItem>
+  <TabItem value="plan" label="Set Boolean Values">
+    ```yaml title="Configure two boolean values"
+    properties:
+      - name: "my_bool"
+        values:
+          - values:
+              - 0
+              - 1
+            weight: 1.0
+    ```
+  </TabItem>
+</Tabs>
