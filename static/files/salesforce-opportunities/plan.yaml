@@ -1,30 +1,35 @@
-name: "sf_accounts"
-entities:
-  - name: "business_account"
+name: "sf_opportunities_plan"
+dialect: "salesforce"
+schema: "sf_opportunities"
+data:
+  - entity: "account"
+    count: 5
     properties:
-      - name: "extId"
-        type: "sequence"
-        index:
-          id: 0
       - name: "Name"
-        type: "text"
-        index:
-          id: 1
         constraints:
+          - type: "category"
+            name: "text"
+          - type: "format"
+            format: |
+              suffixes:
+                - "Inc"
+                - "Corp"
+                - "College"
+                - "Law Firm"
+                - "News"
+              style: 4
           - type: "size"
-            min: 0
-            max: 64
+            min: 1
+            max: 3
       - name: "AccountNumber"
-        type: "text"
         constraints:
           - type: "category"
             name: "id"
           - type: "format"
-            format: "BA-##########"
+            format: "A-##########"
       - name: "Active__c"
-        type: "text"
+        defaultValue: "Yes"
       - name: "Fax"
-        type: "text"
         constraints:
           - type: "category"
             name: "id"
@@ -32,7 +37,6 @@ entities:
           - type: "format"
             format: "(###) ###-####"
       - name: "Phone"
-        type: "text"
         constraints:
           - type: "category"
             name: "id"
@@ -40,131 +44,80 @@ entities:
           - type: "format"
             format: "(###) ###-####"
       - name: "Rating"
-        type: "text"
+        values:
+          - values:
+              - "Hot"
+              - "Warm"
+              - "Cold"
+            weight: 0.85
+        defaultValue: "<?null?>"
       - name: "Type"
-        type: "text"
+        values:
+          - values:
+              - "Prospect"
+              - "Customer - Direct"
+              - "Customer - Channel"
+            weight: 0.7
+          - values:
+              - "Other"
+            weight: 0.3
       - name: "BillingStreet"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "street"
             locale: "en-US"
       - name: "BillingCity"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "city"
             locale: "en-US"
       - name: "BillingState"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "state"
             locale: "en-US"
       - name: "BillingCountry"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "country"
             locale: "en-US"
       - name: "BillingPostalCode"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "zip"
             locale: "en-US"
       - name: "ShippingStreet"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "street"
             locale: "en-US"
       - name: "ShippingCity"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "city"
             locale: "en-US"
       - name: "ShippingState"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "state"
             locale: "en-US"
       - name: "ShippingCountry"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "country"
             locale: "en-US"
       - name: "ShippingPostalCode"
-        type: "text"
         constraints:
           - type: "category"
             name: "address"
             qualifier: "zip"
             locale: "en-US"
-  - name: "contact"
-    properties:
-      - name: "accountRefId"
-        type: "sequence"
-        reference:
-          entity: "business_account"
-          property: "extId"
-          linked: "extId"
-      - name: "AccountId"
-        type: "text"
-        reference:
-          entity: "business_account"
-          property: "AccountNumber"
-          linked: "extId"
-      - name: "Birthdate"
-        type: "date"
-        constraints:
-          - type: "duration"
-            start:
-              year: 1963
-            end:
-              year: 2000
-      - name: "Department"
-        type: "text"
-      - name: "Description"
-        type: "text"
-        constraints:
-          - type: "size"
-            min: 0
-            max: 200
-          - type: "format"
-            format: |
-              style: 3
-
-      - name: "Email"
-        type: "text"
-        constraints:
-          - type: "category"
-            name: "email"
-      - name: "LastName"
-        type: "text"
-        constraints:
-          - type: "category"
-            name: "name"
-            qualifier: "lastname"
-            locale: "en-US"
-      - name: "FirstName"
-        type: "text"
-        constraints:
-          - type: "category"
-            name: "name"
-            qualifier: "firstname"
-            locale: "en-US"
-      - name: "Title"
-        type: "text"
