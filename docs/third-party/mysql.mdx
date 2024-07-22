@@ -79,3 +79,16 @@ MySQL BOOLEAN data type is mapped by a number data type with values constraint.
     ```
   </TabItem>
 </Tabs>
+
+### INT
+MySQL INT data type is mapped by a number data type.
+
+```yaml title="Define INT value between 0 and 99999"
+properties:
+    - name: "my_int"
+      type: "number"
+      constraints:
+        - type: "range"
+          min: 0
+          max: 99999
+```
