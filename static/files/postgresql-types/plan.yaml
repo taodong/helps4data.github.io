@@ -1,0 +1,14 @@
+name: "postgresql_type_map_plan"
+dialect: "postgresql"
+schema: "postgresql_type_map"
+data:
+  - entity: "postgresql_type_map"
+    count: 10
+    properties:
+      - name: "my_enum"
+        values:
+          - values:
+              - "item1"
+              - "item2"
+              - "item3"
+            weight: 1.0

@@ -1,0 +1,63 @@
+---
+sidebar_label: Postgresql
+sidebar_clas_name: green
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Postgresql
+
+To generate Postgresql data, make sure to specify the `dialect` as `postgresql` in your data plan file.
+
+```yaml title="postgresql-plan.yaml"
+name: "postgresql_plan"
+dialect: "postgresql"
+```
+
+## Supported Data Types
+The supported data types for MySQL are:
+
+| MySQL Data Type | Mapped Type             |
+|-----------------|-------------------------|
+| BOOLEAN         | boolean                 |
+| VARCHAR, CHAR   | text with constraints   |
+| TEXT            | text                    |
+| SMALLINT, INTEGER, BIGINT        | number with constraints |
+| DECIMAL, NUMERIC         | number with constraints |
+| REAL, DOUBLE PRECISION         | number with constraints |
+| SMALLSERIAL, SERIAL, BIGSERIAL       | number with constraints |
+| DATE            | date                    |
+| TIME            | time                    |
+| TIMESTAMP       | datetime                |
+| ENUM            | text with values        |
+
+
+**Sample Data Order**
+To generate data for the following table, you can use the schema and plan file below.
+```sql title="Sample Postgresql Data Type Table"
+CREATE TYPE MY_ITEMS AS ENUM ('item1', 'item2', 'item3');
+
+CREATE TABLE IF NOT EXISTS "postgresql_type_map" (
+	"my_small_int" SMALLINT,
+	"my_integer" INTEGER,
+	"my_bigint" BIGINT,
+	"my_decimal" DECIMAL,
+	"my_numeric" NUMERIC,
+	"my_real" REAL,
+	"my_double" DOUBLE PRECISION,
+	"my_smallserial" SMALLSERIAL,
+	"my_serial" SERIAL,
+	"my_bigserial" BIGSERIAL,
+	"my_char" CHAR(10),
+	"my_varchar" VARCHAR(20),
+	"my_text" TEXT,
+	"my_date" DATE,
+	"my_time" TIME,
+	"my_timestamp" TIMESTAMP,
+	"my_enum" MY_ITEMS
+);
+```
+- <a target="_blank" href={useBaseUrl("/files/postgresql-types/schema.yaml")} download="schema.yaml">schema file</a>
+- <a target="_blank" href={useBaseUrl("/files/postgresql-types/plan.yaml")} download="plan.yaml">plan file</a>

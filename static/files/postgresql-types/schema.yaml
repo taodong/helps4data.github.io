@@ -1,0 +1,127 @@
+# MySqL Data Type Mapping Sample
+name: "postgresql_type_map"
+entities:
+  - name: "postgresql_type_map"
+    properties:
+      - name: "my_bool"
+        type: "boolean"
+      - name: "my_small_int"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: -32768
+            max: 32768
+      - name: "my_integer"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: -2147483648
+            max: 2147483648
+      - name: "my_bigint"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: -9223372036854775808
+            max: 9223372036854775807
+      - name: "my_decimal"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: 0
+            max: 99
+          - type: "precision"
+            max: 5
+      - name: "my_numeric"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: 0
+            max: 99
+          - type: "precision"
+            max: 5
+      - name: "my_real"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: -9999
+            max: 9999
+          - type: "precision"
+            max: 6
+      - name: "my_double"
+        type: "number"
+        constraints:
+          - type: "range"
+            min: -9999
+            max: 9999
+          - type: "precision"
+            max: 8
+      - name: "my_smallserial"
+        type: "sequence"
+        constraints:
+          - type: "range"
+            min: 1
+            max: 32768
+      - name: "my_serial"
+        type: "sequence"
+        constraints:
+          - type: "range"
+            min: 1
+            max: 2147483648
+      - name: "my_bigserial"
+        type: "sequence"
+        constraints:
+          - type: "range"
+            min: 1
+            max: 9223372036854775807
+      - name: "my_char"
+        type: "text"
+        constraints:
+          - type: "length"
+            max: 10
+      - name: "my_varchar"
+        type: "text"
+        constraints:
+          - type: "size"
+            min: 1
+            max: 20
+      - name: "my_text"
+        type: "text"
+        constraints:
+          - type: "size"
+            min: 1
+            max: 100
+      - name: "my_date"
+        type: "date"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2000
+              month: 1
+              day: 2
+            end:
+              year: 2023
+              month: 12
+              day: 31
+      - name: "my_timestamp"
+        type: "datetime"
+        constraints:
+          - type: "duration"
+            start:
+              year: 2023
+              month: 12
+              day: 20
+            end:
+              year: 2023
+              month: 12
+              day: 20
+              hour: 23
+              minute: 59
+              second: 59
+      - name: "my_time"
+        type: "time"
+      - name: "my_enum"
+        type: "text"
+
+
+
+
