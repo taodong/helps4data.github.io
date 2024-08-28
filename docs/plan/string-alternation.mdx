@@ -31,8 +31,6 @@ Concatenation allows you to join multiple string values together using the `+` o
 
 The following example demonstrates how to concatenate two string properties "text1" and "text2" using hyphen as a delimiter:
 
-<Tabs defaultValue="schema" groupId="join-string">
-  <TabItem value="schema" label="Schema File">
     ```yaml title="Schema File"
       - name: "text1"
         type: "text"
@@ -54,8 +52,6 @@ The following example demonstrates how to concatenate two string properties "tex
           - type: "size"
             min: 8
             max: 10
-      - name: "delimiter"
-        type: "text"
       - name: "concatenated_text"
         type: "text"
         constraints:
@@ -63,33 +59,13 @@ The following example demonstrates how to concatenate two string properties "tex
             properties:
               - "text1"
               - "text2"
-              - "delimiter"
-            formula: "text1 + delimiter + text2"
+            formula: "text1 + \"-\" + text2"
     ```
-  </TabItem>
-  <TabItem value="plan" label="Plan File">
-  ```yaml title="Define Delimiter in Plan File"
-  - entity: "samples"
-    count: 10
-    properties:
-      - name: "delimiter"
-        defaultValue: " - "
-  ```
-  </TabItem>
-  <TabItem value="output" label="Output Control">
-    ```yaml title="Hide Delimiter in Output Control"
-      entities:
-        - name: "samples"
-          properties:
-            - name: "delimiter"
-              hide: true
-    ```
-  </TabItem>
-</Tabs>
+
 
 
 :::note
-For concatenation, provide all string values through entity properties. If you want to use a delimiter for string join, declare it as a separate property (and hide it from the output).
+For concatenation, the fixed string value should be enclosed in double quotes and double quotes need to be escaped with a backslash.
 :::
 
 ## Bcrypt

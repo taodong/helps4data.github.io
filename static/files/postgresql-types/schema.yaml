@@ -1,4 +1,4 @@
-# MySqL Data Type Mapping Sample
+# PostgreSQL Data Type Mapping Sample
 name: "postgresql_type_map"
 entities:
   - name: "postgresql_type_map"
