@@ -15,6 +15,7 @@ Supported types of string alternation are:
 - concatenation
 - bcrypt hashing
 - pbkdf2 hashing
+- text letter case conversion
 
 Like [correlation](../schema/constraints#correlation) constraints, string alternation uses properties follows:
 - **type**: The value needs to be "alternation".
@@ -24,7 +25,6 @@ Like [correlation](../schema/constraints#correlation) constraints, string altern
 **Sample Files**
 - **<a target="_blank" href={useBaseUrl("/files/string-alternation/schema.yaml")} download="schema.yaml">schema file</a>**
 - **<a target="_blank" href={useBaseUrl("/files/string-alternation/plan.yaml")} download="plan.yaml">plan file</a>**
-- **<a target="_blank" href={useBaseUrl("/files/string-alternation/output.yaml")} download="output.yaml">output control file</a>**
 
 ## Concatenation
 Concatenation allows you to join multiple string values together using the `+` operator.
@@ -121,4 +121,34 @@ Hashes a string value using the PBKDF2(PBKDF2WithHmacSHA1) algorithm.
 The PBKDF2 implementation uses Pbkdf2PasswordEncoder from SpringBootSecurity 6.3.0. Keep in mind that if your backend uses a different encoder, the hashed value may not match.
 :::
 
+## Text Letter Case Conversion
 
+Formula function `STRING_CASE(str, caseType)` converts the string `str` to the specified `caseType`. The `caseType` is case insensitive and can be one of the following:
+
+- `upper`: Converts the string to uppercase.
+- `lower`: Converts the string to lowercase.
+
+<Tabs defaultValue="uppercase" groupId="bcrypt">
+  <TabItem value="uppercase" label="Uppercase">
+  ```yaml title="Convert text to upper case"
+  - name: "to_uppercase"
+    type: "text"
+    constraints:
+      - type: "alternation"
+        properties:
+          - "text1"
+        formula: "STRING_CASE(text1, 'upper')"
+  ```
+  </TabItem>
+  <TabItem value="lowercase" label="Lowercase">
+    ```yaml title="Convert text to lower case"
+    - name: "to_lowercase"
+      type: "text"
+      constraints:
+        - type: "alternation"
+          properties:
+            - "text1"
+          formula: "STRING_CASE(text1, 'lower')"
+    ```
+  </TabItem>
+</Tabs>

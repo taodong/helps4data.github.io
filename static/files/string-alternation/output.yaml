@@ -1,6 +1,0 @@
-name: "alternation"
-entities:
-  - name: "samples"
-    properties:
-      - name: "delimiter"
-        hide: true

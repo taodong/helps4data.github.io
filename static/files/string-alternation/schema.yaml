@@ -26,8 +26,6 @@ entities:
           - type: "size"
             min: 8
             max: 10
-      - name: "delimiter"
-        type: "text"
       - name: "concatenated_text"
         type: "text"
         constraints:
@@ -35,8 +33,7 @@ entities:
             properties:
               - "text1"
               - "text2"
-              - "delimiter"
-            formula: "text1 + delimiter + text2"
+            formula: "text1 + '-' + text2"
       - name: "bcrypt_hash"
         type: "text"
         constraints:
@@ -59,3 +56,17 @@ entities:
               - "text1"
               - "text2"
             formula: "PBKDF2_SHA1(text2, 16, 1000, text1)"
+      - name: "to_uppercase"
+        type: "text"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "text1"
+            formula: "STRING_CASE(text1, 'upper')"
+      - name: "to_lowercase"
+        type: "text"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "text1"
+            formula: "STRING_CASE(text1, 'lower')"
