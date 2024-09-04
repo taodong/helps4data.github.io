@@ -1,0 +1,16 @@
+name: "user_data_convert_sample"
+entities:
+  - name: "my_data"
+    properties:
+      - name: "id"
+        type: "text"
+      - name: "first_name"
+        type: "text"
+      - name: "last_name"
+        type: "text"
+      - name: "email"
+        type: "text"
+  - name: "ignore"
+    properties:
+      - name: "id"
+        type: "sequence"

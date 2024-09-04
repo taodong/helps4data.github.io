@@ -1,0 +1,21 @@
+name: "user_data_sample_template"
+entities:
+  - name: "user_data_sample"
+    properties:
+      - name: "id"
+        type: "text"
+        constraints:
+          - type: "category"
+            name: "id"
+      - name: "first_name"
+        type: "text"
+        index:
+          id: 2
+      - name: "last_name"
+        type: "text"
+        index:
+          id: 2
+      - name: "email"
+        type: "text"
+        index:
+          id: 3

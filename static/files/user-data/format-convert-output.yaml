@@ -1,0 +1,6 @@
+name: "user_data_convert_sample"
+entities:
+  - name: "my_data"
+    properties:
+      - name: "id"
+        hide: true

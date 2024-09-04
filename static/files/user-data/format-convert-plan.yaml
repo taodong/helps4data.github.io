@@ -1,0 +1,6 @@
+name: "user_data_convert_sample"
+dialect: "postgresql"
+schema: "user_data_convert_sample"
+data:
+  - entity: "ignore"
+    count: 1

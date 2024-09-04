@@ -1,0 +1,22 @@
+name: "user_data_sample_template_plan"
+dialect: "postgresql"
+schema: "user_data_sample_template"
+data:
+  - entity: "user_data_sample"
+    count: 50
+    properties:
+      - name: "first_name"
+        constraints:
+          - type: "category"
+            name: "name"
+            qualifier: "firstname"
+      - name: "last_name"
+        constraints:
+          - type: "category"
+            name: "name"
+            qualifier: "lastname"
+      - name: "email"
+        constraints:
+          - type: "category"
+            name: "email"
+            qualifier: "email"

@@ -1,0 +1,48 @@
+name: "apply_user_data_sample"
+entities:
+  - name: "my_data"
+    properties:
+      - name: "id"
+        type: "text"
+      - name: "first_name"
+        type: "text"
+      - name: "last_name"
+        type: "text"
+      - name: "email"
+        type: "text"
+  - name: "customer"
+    properties:
+      - name: "id"
+        type: "sequence"
+        index:
+          id: 0
+      - name: "customer_id"
+        type: "text"
+        reference:
+          entity: "my_data"
+          property: "id"
+          linked: "id"
+      - name: "first_name"
+        type: "text"
+        reference:
+          entity: "my_data"
+          property: "first_name"
+          linked: "id"
+      - name: "last_name"
+        type: "text"
+        reference:
+          entity: "my_data"
+          property: "last_name"
+          linked: "id"
+      - name: "email"
+        type: "text"
+        reference:
+          entity: "my_data"
+          property: "email"
+          linked: "id"
+      - name: "username"
+        type: "text"
+      - name: "name"
+        type: "text"
+      - name: "password"
+        type: "text"

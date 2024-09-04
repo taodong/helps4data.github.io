@@ -1,0 +1,25 @@
+name: "apply_user_data_sample"
+dialect: "postgresql"
+schema: "apply_user_data_sample"
+data:
+  - entity: "customer"
+    count: 50
+    properties:
+      - name: "customer_id"
+        referenceStrategy: "loop"
+      - name: "password"
+        defaultValue: "hello-world!"
+      - name: "username"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "first_name"
+              - "last_name"
+            formula: "STRING_CASE(first_name + '.' + last_name, 'lower')"
+      - name: "name"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "first_name"
+              - "last_name"
+            formula: "first_name + ' ' + last_name"
