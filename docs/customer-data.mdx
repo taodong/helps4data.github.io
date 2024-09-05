@@ -4,6 +4,8 @@ sidebar_label: Apply Your Own Data
 sidebar_clas_name: green
 ---
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Apply Your Own Data
 
@@ -11,15 +13,149 @@ If you are creating a new feature to your existing product, you may need to gene
 
 This feature is also useful when you want to generate data for different scenarios. In this case, you can output a csv file through our service first then use it as boilerplate for your next data generations.
 
+## Example
+Here is an example of how to create customer records based on a csv file that contains 50 records of customer data.
 
+![User Data Example](/img/samples/user_data.png)
+
+### Prepare CSV File
+The my_data.csv used in this example can either be generated using following schema and plan files:
 - <a target="_blank" href={useBaseUrl("/files/user-data/my-data-schema.yaml")} download="my-data-schema.yaml">Sample Data Boilerplate Schema</a>
 - <a target="_blank" href={useBaseUrl("/files/user-data/my-data-plan.yaml")} download="my-data-plan.yaml">Sample Data Boilerplate Plan</a>
-- <a target="_blank" href={useBaseUrl("/files/user-data/m_data.csv")} download="my_data.csv">50 Records Sample Data CSV</a>
 
+A pre-generated csv file can be downloaded from the following link:
+- <a target="_blank" href={useBaseUrl("/files/user-data/my_data.csv")} download="my_data.csv">50 Records Sample Data CSV</a>
+
+### Generate Customer Records
+#### Define **my_data** Entity
+To generate new records based on the csv file, you have to define an entity **my_data** in your schema file which should have properties matching your csv headers.
+```yaml title="Define my_data entity in schema.yaml"
+entities:
+  - name: "my_data"
+    properties:
+      - name: "id"
+        type: "text"
+      - name: "first_name"
+        type: "text"
+      - name: "last_name"
+        type: "text"
+      - name: "email"
+        type: "text"
+```
+
+:::note
+The entity name has to be lowercase "my_data" for our platform to use your csv file.
+:::
+
+### Define Mapping
+To use the records in the csv file, you can use any properties in `my_data` as a reference in your other entities.
+If you want to ensure all the records are used, you can define a one to one mapping by applying same records count and `loop` reference strategy in your target entity.
+
+<Tabs defaultValue="plan" groupId="define_mapping">
+  <TabItem value="schema" label="Define Reference">
+  ```yaml title="Define reference in schema file"
+    - name: "customer"
+      properties:
+        - name: "id"
+          type: "sequence"
+          index:
+            id: 0
+        - name: "customer_id"
+          type: "text"
+          reference:
+            entity: "my_data"
+            property: "id"
+            linked: "id"
+        - name: "first_name"
+          type: "text"
+          reference:
+            entity: "my_data"
+            property: "first_name"
+            linked: "id"
+        - name: "last_name"
+          type: "text"
+          reference:
+            entity: "my_data"
+            property: "last_name"
+            linked: "id"
+        - name: "email"
+          type: "text"
+          reference:
+            entity: "my_data"
+            property: "email"
+            linked: "id"
+        - name: "username"
+          type: "text"
+        - name: "name"
+          type: "text"
+        - name: "password"
+          type: "text"
+  ```
+  </TabItem>
+  <TabItem value="plan" label="Define One to One Mapping">
+  ```yaml title="Define mapping in plan file"
+    - entity: "customer"
+      count: 50
+      properties:
+        - name: "customer_id"
+          referenceStrategy: "loop"
+  ```
+  </TabItem>
+  <TabItem value="output" label="Optional Output Control">
+    ```yaml title="Hide properties in output control file"
+    entities:
+      - name: "customer"
+        properties:
+          - name: "first_name"
+            hide: true
+          - name: "last_name"
+            hide: true
+          - name: "customer_id"
+            hide: true
+    ```
+  </TabItem>
+</Tabs>
+
+
+Apart from the csv file, the other files used for this generation can be downloaded from the following links:
 - <a target="_blank" href={useBaseUrl("/files/user-data/schema.yaml")} download="schema.yaml">Sample Schema</a>
 - <a target="_blank" href={useBaseUrl("/files/user-data/plan.yaml")} download="plan.yaml">Sample Plan</a>
 - <a target="_blank" href={useBaseUrl("/files/user-data/output.yaml")} download="output.yaml">Sample Output Control File</a>
 
+## Format Conversion
+As a side effect (bonus) of applying your own data, you can also convert your csv files into other formats. To use it, you have to define an extra entity to satisfy our validation process.
+<Tabs defaultValue="schema" groupId="format-convert">
+  <TabItem value="schema" label="Define Entity ignore">
+  ```yaml title="Define an extra entity for format conversion"
+  name: "user_data_convert_sample"
+  entities:
+    - name: "my_data"
+      properties:
+        - name: "id"
+          type: "text"
+        - name: "first_name"
+          type: "text"
+        - name: "last_name"
+          type: "text"
+        - name: "email"
+          type: "text"
+    - name: "ignore"
+      properties:
+        - name: "id"
+          type: "sequence"
+  ```
+  </TabItem>
+  <TabItem value="plan" label="Define ignore Record Count">
+    ```yaml title="Plan File"
+    data:
+      - entity: "ignore"
+        count: 1
+    ```
+  </TabItem>
+</Tabs>
+
+
+The following are sample files used to convert the sample csv file
 - <a target="_blank" href={useBaseUrl("/files/user-data/format-convert-schema.yaml")} download="format-convert-schema.yaml">Sample Format Convert Schema</a>
 - <a target="_blank" href={useBaseUrl("/files/user-data/format-convert-plan.yaml")} download="format-convert-plan.yaml">Sample Format Convert Plan</a>
 - <a target="_blank" href={useBaseUrl("/files/user-data/format-convert-output.yaml")} download="format-convert-output.yaml">Sample Format Convert Output Control File</a>
