@@ -9,10 +9,11 @@ import TabItem from '@theme/TabItem';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Quick Start
-Each data generation order takes up to three input files in YAML format:
+Each data generation order takes up to four input files in YAML format:
 1. **Schema File**: [required] It defines the structure of the data to be generated.
 2. **Plan File**: [required] It defines target data details, such as record number.
 3. **Output Control File**: [optional] It defines any modifications for data presentation.
+4. **Data CSV File**: [optional] It provides additional data to be used in the generation process.
 
 For example, we can use this **<a target="_blank" href={useBaseUrl("/files/quick-start/schema.yaml")} download="schema.yaml">schema file</a>** and **<a target="_blank" href={useBaseUrl("/files/quick-start/plan.yaml")} download="plan.yaml">plan file</a>** to generate data, structured as illustrated below
 ![post sample](/img/samples/quick_start.png)
@@ -173,3 +174,6 @@ Though optional, the output control file enables auxiliary features to be applie
 :::tip
 Entity and property names in the schema and plan files should contain only alphanumeric characters, if possible. This can help avoid potential issues when generating data. Utilize the output control file to modify the names as needed.
 :::
+
+## [Data CSV File](./customer-data)
+A csv file used to inject customer's data into the data generation. Please refer to [Apply Your Own Data](./customer-data) page for detailed instruction.
