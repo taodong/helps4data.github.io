@@ -179,7 +179,8 @@ Formula function `STRING_CASE(str, caseType)` converts the string `str` to the s
 
 ## Full Email Address
 Formula function `FULL_EMAIL_ADDRESS(emailAddress, name)` generates a full email address by concatenating the `name` and `emailAddress` properties. The output is using format `${name}<${emailAddress}>`, e.g. `Michael Rath<michael.rath@duotail.com>`.
-Function parameters:
+
+**Function parameters:**
 - `emailAddress`: The email address property.
 - `name`: The optional name property.
 
@@ -203,3 +204,26 @@ Function parameters:
     ```
   </TabItem>
 </Tabs>
+
+## String Template
+Formula function `STRING_TEMPLATE(template, ...values)` generates a new string by replacing placeholders in the `template` with the provided `values`. The placeholders are defined using `${}` syntax, e.g. `Hello ${name}`.
+
+**Function parameters:**
+- `template`: The template string with placeholders.
+- `values`: The values to replace the placeholders. The values are used in pairs, where the first value is the placeholder name and the second value is the replacement value.
+
+### Substitution Rule
+The following rules are applied when replacing placeholders:
+- A placeholder is defined using `${}` syntax, e.g. `${name}`.
+- Placeholder is case sensitive
+- If the placeholder is not found in the template, the placeholder is removed.
+- Escape character `$` is used to escape the placeholder, e.g. `$${name}` is not replaced by the value of `name`.
+
+```yaml title="Generate string using template"
+# Generated string: Hello John, your order number is 123, amount is $100.00.
+- name: "templated_text"
+  type: "text"
+  constraints:
+    - type: "alternation"
+      formula: "STRING_TEMPLATE('Hello ${name}, your order number is ${orderId}, amount is $$${amount}.', 'name', 'John', 'orderId', '123', 'amount', '100.00')"
+```
