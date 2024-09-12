@@ -125,8 +125,10 @@ The PBKDF2 implementation uses Pbkdf2PasswordEncoder from SpringBootSecurity 6.3
 
 Formula function `STRING_CASE(str, caseType)` converts the string `str` to the specified `caseType`. The `caseType` is case insensitive and can be one of the following:
 
-- `upper`: Converts the string to uppercase.
-- `lower`: Converts the string to lowercase.
+- `upper`: Converts the string to uppercase. E.g. "hello world" -> "HELLO WORLD"
+- `lower`: Converts the string to lowercase. E.g. "HELLO WORLD" -> "hello world"
+- `pascal`: Converts the string to pascal case. E.g. "hello world" -> "Hello World"
+- `title`: Converts the string to title case. E.g. "hello world" -> "Hello world"
 
 <Tabs defaultValue="uppercase" groupId="bcrypt">
   <TabItem value="uppercase" label="Uppercase">
@@ -149,6 +151,55 @@ Formula function `STRING_CASE(str, caseType)` converts the string `str` to the s
           properties:
             - "text1"
           formula: "STRING_CASE(text1, 'lower')"
+    ```
+  </TabItem>
+  <TabItem value="pascal-case" label="Pascal Case">
+      ```yaml title="Convert text to Pascal case"
+      - name: "to_lowercase"
+        type: "text"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "text1"
+            formula: "STRING_CASE(text1, 'pascal')"
+      ```
+    </TabItem>
+    <TabItem value="title-case" label="Title Case">
+        ```yaml title="Convert text to title case"
+        - name: "to_lowercase"
+          type: "text"
+          constraints:
+            - type: "alternation"
+              properties:
+                - "text1"
+              formula: "STRING_CASE(text1, 'title')"
+        ```
+    </TabItem>
+</Tabs>
+
+## Full Email Address
+Formula function `FULL_EMAIL_ADDRESS(emailAddress, name)` generates a full email address by concatenating the `name` and `emailAddress` properties. The output is using format `${name}<${emailAddress}>`, e.g. `Michael Rath<michael.rath@duotail.com>`.
+Function parameters:
+- `emailAddress`: The email address property.
+- `name`: The optional name property.
+
+<Tabs defaultValue="concat" groupId="email">
+  <TabItem value="concat" label="Create email with name">
+  ```yaml title="Generate email address: Michael Rath<michael.rath@duotail.com>"
+  - name: "email"
+    type: "text"
+    constraints:
+      - type: "alternation"
+        formula: "FULL_EMAIL_ADDRESS('michael.rath@duotail.com', 'Michael Rath')"
+  ```
+  </TabItem>
+  <TabItem value="extract" label="Create email without name">
+    ```yaml title="Generate email address: michael.rath<michael.rath@duotail.com>"
+    - name: "email"
+      type: "text"
+      constraints:
+        - type: "alternation"
+          formula: "FULL_EMAIL_ADDRESS('michael.rath@duotail.com')"
     ```
   </TabItem>
 </Tabs>
