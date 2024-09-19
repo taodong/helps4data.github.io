@@ -1,0 +1,30 @@
+name: "extra_output_0"
+
+entities:
+  - name: "updated_customer"
+    alias: "customer"
+    properties:
+      - name: "password"
+        hide: true
+      - name: "username"
+        hide: true
+
+extra: |
+  type: "json"
+  content:
+    - label: "loginRequests"
+      valueType: "entity"
+      value: "updated_customer"
+      properties:
+        - name: "username"
+          label: "user"
+        - name: "password"
+    - label: "updateEmailRequests"
+      valueType: "entity"
+      value: "updated_customer"
+      properties:
+        - name: "id"
+        - name: "email"
+        - name: "new_email"
+          label: "newEmail"
+    

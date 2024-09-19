@@ -1,0 +1,43 @@
+name: "extra_output_0"
+dialect: "postgresql"
+schema: "extra_output_0"
+data:
+  - entity: "customer"
+    count: 30
+    properties:
+      - name: "email"
+        constraints:
+          - type: "category"
+            name: "email"
+      - name: "first_name"
+        constraints:
+          - type: "category"
+            name: "name"
+            qualifier: "firstname"
+      - name: "last_name"
+        constraints:
+          - type: "category"
+            name: "name"
+            qualifier: "lastname"
+      - name: "username"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "first_name"
+              - "last_name"
+            formula: "STRING_CASE(first_name + '.' + last_name, 'lower')"
+      - name: "name"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "first_name"
+              - "last_name"
+            formula: "first_name + ' ' + last_name"
+      - name: "raw_password"
+        defaultValue: "passw0rd"
+      - name: "password"
+        constraints:
+          - type: "alternation"
+            properties:
+              - "raw_password"
+            formula: "BCRYPT(raw_password)"

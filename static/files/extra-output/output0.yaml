@@ -1,0 +1,27 @@
+name: "extra_output_0"
+entities:
+  - name: "customer"
+    properties:
+      - name: "first_name"
+        hide: true
+      - name: "last_name"
+        hide: true
+      - name: "raw_password"
+        hide: true
+
+extra: |
+  type: "csv"
+  content:
+    - label: "group"
+      value: "1"
+      valueType: "number"
+    - value: "customer"
+      valueType: "entity"
+      properties:
+        - name: "id"
+          label: "customer_id"
+        - name: "email"
+        - name: "raw_password"
+          label: "password"
+        - name: "username"
+

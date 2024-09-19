@@ -1,0 +1,22 @@
+name: "extra_output_0"
+entities:
+  - name: "customer"
+    properties:
+      - name: "id"
+        type: "sequence"
+        index:
+          id: 0
+      - name: "email"
+        type: "text"
+      - name: "first_name"
+        type: "text"
+      - name: "last_name"
+        type: "text"
+      - name: "username"
+        type: "text"
+      - name: "name"
+        type: "text"
+      - name: "raw_password"
+        type: "text"
+      - name: "password"
+        type: "text"

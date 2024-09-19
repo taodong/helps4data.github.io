@@ -1,0 +1,14 @@
+name: "extra_output_1"
+dialect: "postgresql"
+schema: "extra_output_1"
+
+data:
+  - entity: "updated_customer"
+    count: 30
+    properties:
+      - name: "id"
+        referenceStrategy: "loop"
+      - name: "new_email"
+        constraints:
+          - type: "category"
+            name: "email"

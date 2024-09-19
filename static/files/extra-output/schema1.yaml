@@ -1,0 +1,43 @@
+name: "extra_output_1"
+entities:
+  - name: "my_data"
+    properties:
+      - name: "customer_id"
+        type: "sequence"
+      - name: "password"
+        type: "text"
+      - name: "username"
+        type: "text"
+      - name: "email"
+        type: "text"
+      - name: "group"
+        type: "number"
+  - name: "updated_customer"
+    properties:
+      - name: "id"
+        type: "sequence"
+        reference:
+          entity: "my_data"
+          property: "customer_id"
+          linked: "customer_id"
+      - name: "password"
+        type: "text"
+        reference:
+          entity: "my_data"
+          property: "password"
+          linked: "customer_id"
+      - name: "username"
+        type: "text"
+        reference:
+          entity: "my_data"
+          property: "username"
+          linked: "customer_id"
+      - name: "email"
+        type: "text"
+        reference:
+          entity: "my_data"
+          property: "email"
+          linked: "customer_id"
+      - name: "new_email"
+        type: "text"
+
