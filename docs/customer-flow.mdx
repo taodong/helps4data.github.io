@@ -6,9 +6,343 @@ tags:
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Create Your Data Flow
 
-In real development scenarios, we often face the challenge of verifying a data flow or part of a data flow. In these scenarios, we may need to generate data then use them in the next step of the data flow.
-To achieve it, you can apply both the [user data input](./customer-data) and [extra data file](./output-control#extra-output-file) features in your generation.
-With both input and output files coordinated, you can link multiple data generations to dovetail into your data flow requirement.
+When testing or validating data flows, we frequently encounter the need to generate specific datasets. To accomplish this, we can leverage both [user data input](./customer-data) and [extra data file](./output-control#extra-output-file). By combining these two features and coordinating input and output files, we can create interconnected data generation processes that seamlessly integrate with our desired data flow.
+
+The following is an example of creating data to simulate a customer email update scenario.
+
+## Environment
+
+Assume your application stores customer data in a PostgreSQL database table like the one below:
+
+![Customer Table](/files/extra-output/customer.png)
+
+Your application also exposes two Restful endpoints to update customer data:
+
+1. `POST /customers/auth`: This endpoint authenticates the customer and returns a token.
+
+```json title="Auth Request"
+{
+  "user": "username - text",
+  "password": "password - text"
+}
+```
+
+2. `PUT /customers/password`: This endpoint updates the customer's email.
+
+```json title="Email Update Request"
+{
+  "id": "customer id in database - integer",
+  "email": "current email - text",
+  "newEmail": "new email - text"
+}
+```
+
+## Stepped Data Generation
+
+### Step 1: Generate Database Records
+
+First we can generate customer database records using the following rules:
+
+1. username is formed by join firstname and lastname with a dot.
+2. password for all test records is "passw0rd" and the password in the database is hashed using bcrypt.
+
+<Tabs defaultValue="schema" groupId="Step 1 Generation">
+  <TabItem value="schema" label="Customer Record Schema File">
+    ```yaml title="Schema File"
+    name: "extra_output_1"
+    entities:
+      - name: "customer"
+        properties:
+          - name: "id"
+            type: "sequence"
+            index:
+              id: 0
+          - name: "email"
+            type: "text"
+          - name: "first_name"
+            type: "text"
+          - name: "last_name"
+            type: "text"
+          - name: "username"
+            type: "text"
+          - name: "name"
+            type: "text"
+          - name: "raw_password"
+            type: "text"
+          - name: "password"
+            type: "text"
+    ```
+  </TabItem>
+  <TabItem value="plan" label="Customer Record Plan File">
+    ``` yaml title="Plan File"
+    name: "extra_output_1"
+    dialect: "postgresql"
+    schema: "extra_output_1"
+    data:
+      - entity: "customer"
+        count: 30
+        properties:
+          - name: "email"
+            constraints:
+              - type: "category"
+                name: "email"
+          - name: "first_name"
+            constraints:
+              - type: "category"
+                name: "name"
+                qualifier: "firstname"
+          - name: "last_name"
+            constraints:
+              - type: "category"
+                name: "name"
+                qualifier: "lastname"
+          - name: "username"
+            constraints:
+              - type: "alternation"
+                properties:
+                  - "first_name"
+                  - "last_name"
+                formula: "STRING_CASE(first_name + '.' + last_name, 'lower')"
+          - name: "name"
+            constraints:
+              - type: "alternation"
+                properties:
+                  - "first_name"
+                  - "last_name"
+                formula: "first_name + ' ' + last_name"
+          - name: "raw_password"
+            defaultValue: "passw0rd"
+          - name: "password"
+            constraints:
+              - type: "alternation"
+                properties:
+                  - "raw_password"
+                formula: "BCRYPT(raw_password)"
+    ```
+  </TabItem>
+  <TabItem value="output" label="Customer Record Output File">
+      ``` yaml title="Output Control File"
+      name: "extra_output_1"
+      entities:
+        - name: "customer"
+          properties:
+            - name: "first_name"
+              hide: true
+            - name: "last_name"
+              hide: true
+            - name: "raw_password"
+              hide: true
+
+      extra: |
+        type: "csv"
+        content:
+          - label: "group"
+            value: "1"
+            valueType: "number"
+          - value: "customer"
+            valueType: "entity"
+            properties:
+              - name: "id"
+                label: "customer_id"
+              - name: "email"
+              - name: "raw_password"
+                label: "password"
+              - name: "username"
+      ```
+    </TabItem>
+</Tabs>
+
+Above files can be downloaded from the following links:
+- **<a target="_blank" href={useBaseUrl("/files/extra-output/schema0.yaml")} download="schema.yaml">schema file</a>**
+- **<a target="_blank" href={useBaseUrl("/files/extra-output/plan0.yaml")} download="plan.yaml">plan file</a>**
+- **<a target="_blank" href={useBaseUrl("/files/extra-output/output0.yaml")} download="output.yaml">output control file</a>**
+
+Two files will be generated in this step:
+1. customer_0.sql - SQL file to insert customer records into the database.
+3. extra.csv - CSV file to be used in the next step.
+
+**Sample snippet of the extra.csv file:**
+
+![Sample extra.csv snippet](/files/extra-output/csv-snippet.png)
+
+### Step 2: Generate Email Update Requests
+
+Apart from using the `extra.csv` from the step 1 as the `Data CSV File`, we can generate email update requests for test customer records by applying configurations files below:
+
+<Tabs defaultValue="schema" groupId="Step 2 Generation">
+  <TabItem value="schema" label="Apply Data File Schema">
+    ```yaml title="Schema File"
+    name: "extra_output_2"
+    entities:
+      - name: "my_data"
+        properties:
+          - name: "customer_id"
+            type: "sequence"
+          - name: "password"
+            type: "text"
+          - name: "username"
+            type: "text"
+          - name: "email"
+            type: "text"
+          - name: "group"
+            type: "number"
+      - name: "updated_customer"
+        properties:
+          - name: "id"
+            type: "sequence"
+            reference:
+              entity: "my_data"
+              property: "customer_id"
+              linked: "customer_id"
+          - name: "password"
+            type: "text"
+            reference:
+              entity: "my_data"
+              property: "password"
+              linked: "customer_id"
+          - name: "username"
+            type: "text"
+            reference:
+              entity: "my_data"
+              property: "username"
+              linked: "customer_id"
+          - name: "email"
+            type: "text"
+            reference:
+              entity: "my_data"
+              property: "email"
+              linked: "customer_id"
+          - name: "new_email"
+            type: "text"
+    ```
+  </TabItem>
+  <TabItem value="plan" label="Apply Data File Plan">
+    ``` yaml title="Plan File"
+    name: "extra_output_2"
+    dialect: "postgresql"
+    schema: "extra_output_2"
+
+    data:
+      - entity: "updated_customer"
+        count: 30
+        properties:
+          - name: "id"
+            referenceStrategy: "loop"
+          - name: "new_email"
+            constraints:
+              - type: "category"
+                name: "email"
+    ```
+  </TabItem>
+  <TabItem value="output" label="Apply Data File Output">
+      ``` yaml title="Output Control File"
+      name: "extra_output_2"
+
+      entities:
+        - name: "updated_customer"
+          alias: "customer"
+          properties:
+            - name: "password"
+              hide: true
+            - name: "username"
+              hide: true
+
+      extra: |
+        type: "json"
+        content:
+          - label: "loginRequests"
+            valueType: "entity"
+            value: "updated_customer"
+            properties:
+              - name: "username"
+                label: "user"
+              - name: "password"
+          - label: "updateEmailRequests"
+            valueType: "entity"
+            value: "updated_customer"
+            properties:
+              - name: "id"
+              - name: "email"
+              - name: "new_email"
+                label: "newEmail"
+      ```
+    </TabItem>
+</Tabs>
+
+Downloadable version of the files:
+- **<a target="_blank" href={useBaseUrl("/files/extra-output/schema1.yaml")} download="schema.yaml">schema file</a>**
+- **<a target="_blank" href={useBaseUrl("/files/extra-output/plan1.yaml")} download="plan.yaml">plan file</a>**
+- **<a target="_blank" href={useBaseUrl("/files/extra-output/output1.yaml")} download="output.yaml">output control file</a>**
+
+Other than the regular data files, an extra json file will be generated in this step:
+
+1. <a target="_blank" href={useBaseUrl("/files/extra-output/extra.json")} download="extra.json">extra.json</a> - JSON file to be used in the test scenario.
+
+Payload of the final json file looks like the following:
+
+```json title="Sample output json payload"
+{
+  "updateEmailRequests" : [ {
+    "newEmail" : "mxyx.u1stw6a@pea1zeuz.inc",
+    "id" : 1,
+    "email" : "caldo.uve0eww@4bdmr5g.net"
+  }, {
+    "newEmail" : "hxusf.l2hqoi@wxpzfm.info",
+    "id" : 2,
+    "email" : "vzc3mci.yijm@g75.info"
+  }, {
+    "newEmail" : "lzevix.upw@2d3vmn.net",
+    "id" : 3,
+    "email" : "xtsb.8e7rhnt@3dskei.io"
+  }, {
+    "newEmail" : "zlixdcg.edwpe@8nef.com",
+    "id" : 4,
+    "email" : "hrffo.naxymd@5tiz.app"
+  }, {
+    "newEmail" : "owve.z8i7@pvlvsiw.org",
+    "id" : 5,
+    "email" : "vtzlawkg.kjnspgs@gw21.io"
+  }, {
+    "newEmail" : "4ytps8f.ivhren@axldzz7r.org",
+    "id" : 6,
+    "email" : "sdh.mz082xk@2upy9.org"
+  }, {
+    "newEmail" : "koquyzo.ded3@3ae.com",
+    "id" : 7,
+    "email" : "4igph85.twh@zslfhiid.org"
+  }, {
+    "newEmail" : "dsq.nsgt@spom.inc",
+    "id" : 8,
+    "email" : "nslg00m6.om4a5vq@e8gk.net"
+  }],
+  "loginRequests" : [{
+    "password" : "passw0rd",
+    "user" : "herta.krajcik"
+  }, {
+    "password" : "passw0rd",
+    "user" : "rolando.kozey"
+  }, {
+    "password" : "passw0rd",
+    "user" : "jerold.bayer"
+  }, {
+    "password" : "passw0rd",
+    "user" : "eric.rosenbaum"
+  }, {
+    "password" : "passw0rd",
+    "user" : "gary.parisian"
+  }, {
+    "password" : "passw0rd",
+    "user" : "jan.labadie"
+  }, {
+    "password" : "passw0rd",
+    "user" : "elbert.moen"
+  }, {
+    "password" : "passw0rd",
+    "user" : "ramiro.lang"
+  }]
+}
+```

@@ -1,6 +1,6 @@
-name: "extra_output_0"
+name: "extra_output_1"
 dialect: "postgresql"
-schema: "extra_output_0"
+schema: "extra_output_1"
 data:
   - entity: "customer"
     count: 30
